@@ -1,0 +1,245 @@
+/* Shared device adjustments, loaded after each screen's visual styles. */
+html{scrollbar-gutter:stable;scroll-padding-top:20px}
+body{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html.modal-open{overflow:hidden}
+:root{--muted:#b1a5ae;--subtle:#9b8d99}
+:root[data-theme=night]{--muted:#b3a4ae;--subtle:#a2919f}
+button,summary{touch-action:manipulation}
+.icon-button,.dialog-header .icon-button,.card-topline>.icon-button{min-width:44px;width:44px;min-height:44px;height:44px}
+button.ghost,.small-link,.card-extras summary,.how summary,.setting-section summary,.keyboard-help>summary{min-height:44px}
+.lv,.md,.settings-link{min-height:48px}
+label,.players-row label,.heat-heading label{font-size:12px;letter-spacing:.4px}
+.players-row input{font-size:16px;min-height:48px}
+.lv{font-size:12px;padding:11px 10px}
+.heat-caption,.heat-heading>span,.session-stats>.note{font-size:11px}
+.md{font-size:13px;gap:8px}
+.eyebrow,.header-caption,.table-meta .eyebrow{font-size:10px;letter-spacing:1.4px}
+.table-status,.table-bottom,.game-footnote,.dialog-note,.field-hint{font-size:11px}
+.turn,.tag,.how summary,.how p{font-size:12px}
+#text{font-size:16px;line-height:1.75}
+.name{font-size:34px;line-height:1.2}
+.body{padding:12px 24px 8px}
+.card{max-width:560px;margin-bottom:24px}
+.art{height:112px}
+.timer-button,.card-outcomes .main,.card-outcomes .ghost{font-size:13px;min-height:48px}
+.card-extras summary{font-size:12px}
+.card-extras .ghost{font-size:12px;min-height:44px;flex-basis:110px}
+.card-topline{min-height:44px}
+#outcomeStatus:empty{display:none}
+.locked .art{filter:none;opacity:1;background:radial-gradient(ellipse at center,#533442,#241d25)}
+.locked .art>*{visibility:hidden}
+.how ol,.forfeit p,.check-in p{font-size:14px}
+.check-in button,.forfeit .ghost{font-size:12px;min-height:44px}
+.chips label{font-size:12px;min-height:44px}
+.chips input{width:18px;height:18px}
+.check{font-size:13px;min-height:48px}
+.check input{width:20px;height:20px}
+.rules-link{font-size:12px}
+#readyActions>.ready-person{font-size:14px;min-height:48px}
+#gate>.note{font-size:13px}
+.fv button{font-size:14px;overflow-wrap:anywhere}
+.fv .x{min-width:44px}
+.action-dock{position:sticky;bottom:max(12px,env(safe-area-inset-bottom,0px));z-index:5;margin-top:12px;padding:14px 18px;background:var(--surface);border:1px solid var(--line);border-radius:14px;box-shadow:0 8px 32px #0003}
+.action-dock .mode-controls,.action-dock .evening-controls,.dice-actions{max-width:560px;width:100%;margin:0 auto}
+.action-dock .mode-controls{grid-template-columns:minmax(0,1fr) 140px}
+.action-dock .main,.action-dock .ghost{min-height:52px;font-size:14px}
+.dice-actions>.main{width:100%;justify-content:space-between}
+.action-dock .evening-controls>.note{font-size:12px;margin:6px 0 10px}
+.action-dock .evening-progress{margin-bottom:0}
+.table-bottom{padding:15px 0}
+.empty-state{padding-bottom:24px}
+.play-table{scroll-margin-top:16px}
+.card{scroll-margin-top:16px}
+.game-main{min-width:0;outline:none}
+.dice-panel{padding:30px 0 24px;max-width:560px}
+.die>span{font-size:10px;letter-spacing:1px}
+.die>strong{font-size:24px}
+.dres{font-size:21px}
+.dice-panel .row .ghost{min-height:44px;font-size:12px}
+.keyboard-help{border-top:1px solid var(--line);padding-top:10px;font-size:13px}
+.keyboard-help>summary{display:flex;align-items:center;color:var(--muted)}
+.keyboard-help dl{margin:10px 0}
+.keyboard-help dl>div{display:flex;align-items:center;gap:18px;padding:6px 0}
+.keyboard-help dt{min-width:100px}
+.keyboard-help dd{margin:0;color:var(--muted)}
+kbd{display:inline-block;min-width:26px;padding:2px 6px;border:1px solid var(--line);border-radius:5px;font:12px var(--sans);text-align:center;background:#ffffff04}
+dialog{max-height:calc(var(--visual-height,100dvh) - 32px);overflow-y:auto;scroll-padding:20px;padding:26px;border-radius:18px}
+.dialog-header{align-items:center;margin-bottom:24px}
+.auth-card label{font-size:12px}
+.auth-card .check{font-size:13px;min-height:44px;align-items:center}
+.auth-card .check input{width:19px;height:19px;min-height:19px;margin:0}
+.auth-card .links{font-size:12px}
+.auth-card .links a{display:inline-flex;min-height:44px;align-items:center}
+.tracking-details{font-size:12px;margin-left:30px}
+.tracking-details summary{min-height:44px;display:flex;align-items:center}
+.tracking-details p,.privacy{font-size:12px}
+.auth-lead,.auth-card:has(form) .auth-lead{font-size:14px}
+.auth-card .message,#setupMessage{font-size:13px}
+.auth-card .actions .button,.auth-card .form-submit{font-size:14px}
+@media(min-width:980px){
+ .game-layout{grid-template-columns:280px minmax(0,1fr);gap:28px}
+ .session-sidebar{position:sticky;top:20px;max-height:calc(100dvh - 40px);overflow-y:auto;scrollbar-width:thin}
+ .session-panel>summary{font-size:14px}
+ .mode-nav{grid-template-columns:1fr 1.6fr .8fr 1fr}
+ .mode-long{display:inline}.mode-short{display:none}
+ .play-table{padding:22px 26px 0}
+ .table-meta{gap:16px}
+ .table-status{font-size:10px}
+ .session-stats .stat-number>span{font-size:12px}
+ .settings-link{font-size:13px}
+ .card-outcomes{grid-template-columns:minmax(0,1fr) 120px}
+}
+/* Tablets get the full game width instead of a squeezed desktop sidebar. */
+@media(max-width:979px){
+ .app-shell,.auth-shell{padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px))}
+ .app-header{min-height:80px;gap:12px}
+ .header-caption{display:none}
+ .header-actions{gap:5px}
+ .brand>span{font-size:35px}.brand>.icon{width:25px;height:25px}.brand{gap:9px}
+ .intro-row{margin:22px 0 20px}
+ .intro-row h1{font-size:40px}
+ .intro-row .eyebrow{margin-bottom:8px}
+ .live-badge{font-size:11px;gap:8px;padding:7px 10px}
+ .game-layout{display:flex;flex-direction:column;gap:12px}
+ .session-sidebar,.game-main{width:100%}
+ .session-panel{border-radius:12px}
+ .session-panel>summary{font-size:13px;min-height:48px;padding:12px 16px}
+ .session-panel>summary>.icon:last-child{display:block}
+ .session-content{padding:8px 16px 0}
+ .players-row{grid-template-columns:minmax(0,1fr) 20px minmax(0,1fr)}
+ .levels{grid-template-columns:repeat(4,minmax(0,1fr))}
+ .lv{justify-content:center;gap:7px;padding:10px 8px;font-size:12px}
+ .heat-heading{margin-top:20px}
+ .settings-link{width:calc(100% + 32px);margin:0 -16px;padding:12px 16px;font-size:13px;border-radius:0 0 12px 12px}
+ .session-stats,.sidebar-note,.rules-link{display:none}
+ .mode-nav{grid-template-columns:.9fr 1.5fr .8fr 1fr;margin-bottom:12px}
+ .md{font-size:13px}
+ .mode-long{display:none}.mode-short{display:inline}
+ .play-table{padding:18px 20px 0;border-radius:16px}
+ .game-footnote{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:8px 0 15px;font-size:11px}
+ .game-footnote .mobile-rules{display:inline-flex;font-size:12px}
+ .game-footnote>.mobile-rules{flex-shrink:0}
+ .empty-state .deck-art{height:230px}
+ .empty-state h2{font-size:30px}
+ .empty-state>p{font-size:14px}
+ .action-dock{margin-top:10px}
+ .auth-layout{gap:30px;min-height:0}
+ .auth-art{min-height:520px}
+ #toast{bottom:max(100px,calc(85px + env(safe-area-inset-bottom,0px)))}
+}
+@media(max-width:600px){
+ .app-shell,.auth-shell{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+ .app-header{min-height:72px}
+ .intro-row{margin:18px 0}
+ .intro-row h1{font-size:34px}
+ .intro-row .eyebrow{font-size:10px;letter-spacing:1px}
+ .live-badge{font-size:10px;padding:6px 8px;letter-spacing:0}
+ .mode-nav{padding:4px;gap:3px}
+ .md{font-size:11px;gap:5px;padding:8px 2px}
+ .md>.icon{width:15px;height:15px}
+ .table-meta .eyebrow{font-size:10px;letter-spacing:.8px}
+ .table-status{font-size:10px;gap:5px}
+ .play-table{padding:15px 14px 0}
+ .empty-state{padding-top:0;padding-bottom:20px}
+ .empty-state .deck-art{height:205px}
+ .empty-state h2{font-size:27px;letter-spacing:-.7px;margin-bottom:9px}
+ .empty-state>p{font-size:13px}
+ .deck-card{width:128px;height:166px;margin:-83px 0 0 -64px}
+ .deck-card.back-one{transform:rotate(-18deg) translate(-25px,5px)}
+ .deck-card.back-two{transform:rotate(16deg) translate(25px,5px)}
+ .lv{font-size:11px;gap:5px;padding:9px 4px}
+ .lv>.icon{width:14px;height:14px}
+ .body{padding:9px 16px 6px}
+ .card{margin-top:15px;margin-bottom:20px}
+ .art{height:76px}
+ .art>svg{height:140px;top:-32px}
+ .name{font-size:29px;letter-spacing:-.5px}
+ .turn{font-size:12px;line-height:1.65;margin-bottom:12px}
+ .tag{font-size:10px;letter-spacing:.7px}
+ #text{font-size:15px;line-height:1.75}
+ .timer-row{gap:12px;padding:12px 0}
+ .timer{font-size:28px}
+ .card-outcomes{grid-template-columns:minmax(0,1fr) 90px}
+ .card-outcomes .main,.card-outcomes .ghost{font-size:13px;padding:10px 12px}
+ .action-dock{padding:10px;border-radius:12px;bottom:max(8px,env(safe-area-inset-bottom,0px))}
+ .action-dock .mode-controls{grid-template-columns:minmax(0,1fr) 112px;gap:8px}
+ .action-dock .main,.action-dock .ghost{font-size:13px;padding:12px}
+ .action-dock .mode-controls>.main>.icon:last-child{width:16px}
+ .action-dock .evening-controls>.note{font-size:11px}
+ .table-bottom{font-size:10px;gap:8px}
+ .game-footnote{font-size:10px;gap:6px}
+ .game-footnote .mobile-rules{font-size:11px}
+ html[data-playing=true] .intro-row{display:none}
+ html[data-playing=true] .game-layout{margin-top:14px}
+ .app-footer{font-size:9px;letter-spacing:.8px;flex-wrap:wrap;gap:8px}
+ .app-footer>span:last-child{font-size:11px}
+ .dice-panel{padding:25px 0 12px}
+ .dice-panel h2{font-size:28px;margin-bottom:24px}
+ .dice{gap:8px}
+ .die{padding:12px 6px 20px;min-height:130px}
+ .die>span{font-size:9px;letter-spacing:.6px}
+ .die>strong{font-size:20px}
+ .dres{font-size:20px;margin:22px 0;min-height:56px}
+ .dice-panel .timer-row{flex-wrap:wrap}
+ .dice-panel .timer-row>.row{margin-left:auto}
+ .check-in{padding:13px;gap:10px}
+ .check-in p{font-size:13px}
+ dialog{padding:20px;max-width:calc(100% - 24px)}
+ .dialog-header h2{font-size:29px}
+ .dialog-header .eyebrow{font-size:10px}
+ .rules-list p,.consent-note{font-size:13px}
+ .keyboard-help dt{min-width:92px}
+ .keyboard-help dd{font-size:12px}
+ .auth-layout{grid-template-columns:1fr;padding:30px 0;min-height:0}
+ .auth-card{margin:0 auto;width:100%;max-width:420px}
+ .auth-card h1{font-size:60px}
+ .auth-card:has(form) h1{font-size:46px}
+ .auth-layout:has(form){padding:30px 0}
+ .auth-art{min-height:360px}
+ .auth-layout:has(form)>.auth-art{display:none}
+ .auth-shell>.app-header>.eyebrow{font-size:9px;letter-spacing:1px;text-align:right;max-width:140px}
+ .auth-shell>.app-footer{font-size:9px}
+ .auth-card .links{gap:8px;align-items:flex-start;flex-wrap:wrap}
+ .auth-card .check{min-height:44px}
+}
+@media(max-width:380px){
+ .app-shell,.auth-shell{padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px))}
+ .brand>span{font-size:30px}.brand>.icon{width:21px;height:21px}.brand{gap:7px}
+ .header-actions{gap:2px}.header-divider{display:none}.app-header{gap:8px}
+ .intro-row h1{font-size:30px}.live-badge{font-size:9px}
+ .table-status{font-size:9px}.table-meta .eyebrow{font-size:9px}
+ .play-table{padding-left:12px;padding-right:12px}
+ .empty-state h2{font-size:25px}
+ .lv{font-size:10px;gap:3px}
+ .mode-nav .md{font-size:10px;gap:4px}
+ .mode-nav .md>.icon{width:13px;height:13px}
+ .action-dock .mode-controls{grid-template-columns:minmax(0,1fr) 102px}
+ .action-dock .main,.action-dock .ghost{font-size:12px;padding:11px 9px}
+ .table-bottom{font-size:9px}
+ .game-footnote>span{max-width:190px}
+}
+/* Landscape phones keep navigation compact and leave space for the prompt. */
+@media(max-height:520px) and (max-width:979px){
+ .app-header{min-height:60px}
+ .intro-row{display:none}
+ .game-layout{margin-top:12px}
+ .empty-state .deck-art{height:140px}
+ .empty-state .deck-card{width:90px;height:117px;margin:-59px 0 0 -45px}
+ .empty-state h2{font-size:26px}
+ .art{height:55px}
+ .auth-layout{padding:24px 0;grid-template-columns:1fr}
+ .auth-layout>.auth-art{display:none}
+ .auth-card{width:min(100%,430px);margin:0 auto}
+ .auth-shell .auth-card h1{font-size:44px;margin:10px 0}
+ .auth-card .auth-lead{margin-bottom:18px}
+}
+@media(hover:none){
+ .main:hover:not(:disabled),.primary:hover:not(:disabled){transform:none;box-shadow:none}
+ dialog::backdrop{backdrop-filter:none}
+}
+@media(prefers-reduced-motion:reduce){.card.flip,.deck-card.front{animation:none!important}}
+#gate>.ghost{min-height:44px}
+@media(max-width:979px){
+ .mode-nav{position:sticky;top:max(8px,env(safe-area-inset-top,0px));z-index:6;box-shadow:0 5px 18px #0003}
+ .card{scroll-margin-top:80px}
+}
