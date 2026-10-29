@@ -15,7 +15,11 @@ Extract the ZIP and drag its **dist** folder into the **Deploys** tab of your ex
 Upload the folder that directly contains `index.html`, `game.html`, and `assets/`.
 No build command is needed for this manual upload. Keep the same Netlify site URL
 so existing Supabase redirect settings and browser-saved cards continue to work.
-The included public Supabase configuration is the one from the uploaded site.
+The public Supabase project address is verified against the connected Kama project. The existing publishable key is preserved.
+
+## Account connection fix
+
+The original uploaded project URL contained a 21-character reference instead of the verified 20-character Kama project reference. The URL is corrected to `https://eqvzzfivcujfwdfdvodm.supabase.co`; the existing publishable key was checked against the project and remains valid. Both browser initialization and the build now reject malformed project references before attempting a connection. The source, built `dist`, and downloadable ZIP carry the corrected configuration.
 
 ## Added question bank and random selection
 
@@ -105,4 +109,4 @@ modals, night mode, and signed-out redirects. Additional checks covered keyboard
 
 Auth screen success, error and email-confirmation states were tested with a
 mocked service. No live account was created and live Supabase authentication
-was not verified. The uploaded public project configuration is preserved.
+was not verified. The original publishable key is preserved; the malformed project URL has been corrected against the connected project metadata.

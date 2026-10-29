@@ -22,7 +22,7 @@ const supplied = (process.env.KAMA_SUPABASE_URL || process.env.KAMA_SUPABASE_PUB
     : saved;
 const url = supplied.url || '';
 const publishableKey = supplied.publishableKey || '';
-if (!/^https:\/\/[^/]+\.supabase\.co$/.test(url) || !publishableKey.startsWith('sb_publishable_')) {
+if (!/^https:\/\/[a-z0-9]{20}\.supabase\.co$/.test(url) || !publishableKey.startsWith('sb_publishable_')) {
   throw new Error('A valid public Supabase URL and publishable key are required before building.');
 }
 rmSync(dist, { recursive: true, force: true });

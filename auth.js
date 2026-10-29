@@ -5,8 +5,8 @@
     window.kamaSupabase = null;
     return;
   }
-  if (!/^https:\/\/[^/]+\.supabase\.co$/.test(config.url || "") || !config.publishableKey || config.publishableKey.includes("REPLACE_ME")) {
-    window.kamaSupabaseError = "Supabase is not configured. Add SUPABASE_URL and SUPABASE_PUBLISHABLE_KEY to the deployment environment.";
+  if (!/^https:\/\/[a-z0-9]{20}\.supabase\.co$/.test(config.url || "") || !config.publishableKey || config.publishableKey.includes("REPLACE_ME")) {
+    window.kamaSupabaseError = "The account connection is not configured correctly. Please contact the site owner.";
     window.kamaSupabase = null;
     return;
   }
