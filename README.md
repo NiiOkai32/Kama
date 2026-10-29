@@ -2,7 +2,9 @@
 
 A responsive card game with 503 supplied prompts integrated into the appropriate sections and a persistent, balanced random picker.
 
-**[Download the Netlify-ready ZIP](https://github.com/NiiOkai32/Kama/raw/refs/heads/kama-ui-mobile-questions/downloads/kama-netlify-dist.zip)**
+**[Download the Duet review build](https://github.com/NiiOkai32/Kama/raw/refs/heads/duet-premium/downloads/kama-netlify-dist.zip)**
+
+Duet adds private online rooms for two signed-in players, shared prompts, readiness and timers. The proposed membership is **US$1.99/month**; one paying host covers their invited partner. **Checkout is disabled** pending merchant approval and billing integration. [Setup and current limits](docs/DUET.md).
 
 Extract the ZIP and drag its **dist** folder into the **Deploys** tab of your existing Netlify site. The full source and built `dist` are included in this branch.
 
@@ -69,15 +71,13 @@ controls, Fire readiness, Evening's Wind-down stage, and 320–1440px layouts.
 ## Interface changes
 
 - Dark plum surfaces, warm accents, illustrated card deck and consistent icons.
-- Responsive session controls and four modes: Cards, Truth or Desire, Dice, Evening.
+- Responsive session controls and five modes: Cards, Truth or Desire, Dice, Evening, Duet.
 - Shorter labels; themes, custom cards, instructions and extra actions open on demand.
 - Matching welcome, sign-in, signup and confirmation screens.
 - Existing browser storage keys are preserved for favourites, images, custom cards and history.
 - Mode changes and completed cards stop their timers. Filtered themes are respected when drawing.
 
-The original Duet implementation calls `claude.use('room')`, which is unavailable
-on a standalone Netlify site. Its entry is hidden from the web interface; this
-redesign does not introduce a replacement multiplayer backend.
+Duet replaces the original unsupported room API with an authenticated Supabase Edge Function, transactional room commands and RLS-protected Realtime updates. Other modes remain free. See [Duet setup](docs/DUET.md) before publishing this review build.
 
 ## Build again
 
@@ -95,16 +95,14 @@ key is explicitly present. Never use a service-role or secret key in this site.
 
 The existing `netlify.toml` still uses `node build.mjs` and publishes `dist`.
 Supabase Auth uses the existing hosted service; its JavaScript client still
-loads from the same jsDelivr URL as the uploaded version. No database changes
-are required by this interface update. The existing SQL migration is retained
-in the source archive for reference and is not included in the public build.
+loads from the same jsDelivr URL as the uploaded version. Duet requires the new membership/room migration and Edge Function described in `docs/DUET.md`. Backend sources, migrations and tests are excluded from the public `dist` build.
 
 ## Verification
 
 Checked JavaScript syntax, duplicate IDs, asset references, and public build
 contents. Browser checks passed at widths from 320 to 1920 pixels, including short landscape viewports. Additional Chromium mobile emulation used touch events and a reduced viewport height to exercise settings with an on-screen keyboard. These are browser emulation checks, not physical-device or Safari tests.
 Verified card drawing, timers, readiness gates for additional players, completion,
-forfeits, favourites, custom cards, storage persistence, all four web modes,
+forfeits, favourites, custom cards, storage persistence, the four local web modes,
 modals, night mode, and signed-out redirects. Additional checks covered keyboard shortcuts, background timer catch-up, cancelled dice rolls, reduced motion, tall-image memory bounds, and PC-to-tablet resizing without losing player input.
 
 Auth screen success, error and email-confirmation states were tested with a

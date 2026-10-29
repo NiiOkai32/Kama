@@ -1,0 +1,3 @@
+[functions.duet]
+# The handler independently validates the user's access token with Auth /user.
+verify_jwt = false

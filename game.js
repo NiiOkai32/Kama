@@ -31,7 +31,7 @@ const CARDS=[
 ];
 const HUES={1:340,2:350,3:10};
 let level=1,cur=null,leader=0,turnCard=null,tid=null,left=0,imgs={};
-function names(){return [$('p1').value.trim()||'One',$('p2').value.trim()||'Two',...$('p3').value.split(',').map(x=>x.trim()).filter(Boolean)]}
+function names(){if(mode==='duet'&&window.kamaDuet?.getNames())return window.kamaDuet.getNames();return [$('p1').value.trim()||'One',$('p2').value.trim()||'Two',...$('p3').value.split(',').map(x=>x.trim()).filter(Boolean)]}
 // Each named traditional position gets its own simple, non-explicit pose study.
 // The figures are deliberately abstract silhouettes so the art reads clearly at card size.
 const POSES={
@@ -507,46 +507,14 @@ $('amb').onclick=()=>{
     [110,164.8,220,277.2].forEach((fr,i)=>{const o=ac.createOscillator();o.frequency.value=fr;const l=ac.createOscillator(),lg=ac.createGain();l.frequency.value=.05+i*.03;lg.gain.value=3;l.connect(lg);lg.connect(o.frequency);o.connect(f);o.start();l.start()});
     $('amb').setAttribute('aria-pressed','true');$('amb').title='Turn ambient sound off'}catch(e){ac=null}
 };
-// ---- duet (two devices) ----
-let room=null,duetOn=false,did='',dmine=0,dtheirs=0,mysec='';
-const _g=gtap;
-gtap=function(i){if(!(duetOn&&mode==='duet'))return _g(i);dmine=1;$('g1').disabled=true;if(room)room.emit('ready',{cid:did});dchk()};
-function dchk(){if(dmine&&dtheirs){$('card').classList.remove('locked');if($('auto').checked)$('start').click()}}
-const _s3=show;
-show=function(c){$('g2').classList.remove('hidden');_s3(c)};
-function duetShow(d){
-  const f=CARDS.find(x=>x.n===d.n)||{l:Math.min(3,Math.max(0,+d.l||1)),n:'Shared card',t:String(d.t||'').slice(0,300),s:180};
-  did=String(d.cid||'').slice(0,20);dmine=0;dtheirs=0;
-  show(Object.assign({},f,{k:f.k||'Shared'}));
-  if($('card').classList.contains('locked')){$('g2').classList.add('hidden');$('g1').textContent='I’m ready';$('g1').disabled=false;$('gnote').textContent='Waiting for you both. Tap when you’re happy to see this card.'}
-}
+// Duet now uses its authenticated room service; there is no in-app room dependency.
 setMode=function(m){mode=m;clearInterval(tid);tid=null;
-  document.querySelectorAll('.md').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m===m));
-  ['cards','td','dice','ev','duet'].forEach(k=>$('m-'+k).classList.toggle('hidden',k!==m));
-  if(m==='dice')$('card').classList.add('hidden');};
-$('djoin').onclick=async()=>{
-  const code=($('dcode').value||'').toLowerCase().replace(/[^a-z0-9]/g,'').slice(0,20);
-  if(!code){$('dst').textContent='Enter a short code you both use.';return}
-  try{
-    const R=await claude.use('room');
-    if(!R){$('dst').textContent='Duet only works when this page is opened inside Claude while signed in.';return}
-    if(room)await room.leave();
-    room=await R.join('kama'+code);duetOn=true;
-    room.onPeers(ch=>{const n=ch.peers.length;$('dst').textContent=n>1?'Connected · '+n+' here':'Connected. Waiting for your partner to join the same code.'});
-    room.on('card',m=>{if(m.data&&typeof m.data==='object')duetShow(m.data)});
-    room.on('ready',m=>{if(!m.isMe&&m.data&&m.data.cid===did){dtheirs=1;dchk()}});
-    room.on('secret',m=>{if(!m.isMe&&m.data&&typeof m.data.t==='string')$('dpeer').textContent='Your partner reveals: '+m.data.t.slice(0,300)});
-  }catch(e){$('dst').textContent='Could not join. Check the sharing permissions and try again.'}
+ document.querySelectorAll('.md').forEach(x=>x.setAttribute('aria-pressed',x.dataset.m===m));
+ ['cards','td','dice','ev','duet'].forEach(k=>$('m-'+k).classList.toggle('hidden',k!==m));
+ if(m==='dice')$('card').classList.add('hidden');
 };
-$('dcard').onclick=()=>{
-  if(!room)return;
-  let p=CARDS.filter(c=>c.l===level&&c.k!=='Wind-down'&&ok(c));if(!p.length)p=CARDS.filter(c=>c.l===level);
-  const c=promptPicker.take(p,{avoid:cur?.t});if(!c)return;room.emit('card',{cid:Math.random().toString(36).slice(2,10),n:c.n,t:c.t,l:c.l});
-};
-$('dsec').onclick=()=>{const k=Math.random()<.5?'truth':'desire',a=TD[k][level]||TD[k][1];mysec=promptPicker.take(a,{avoid:mysec})||'';$('dmine').textContent='Only you can see this: '+mysec;$('dreveal').classList.remove('hidden')};
-$('dreveal').onclick=()=>{if(room&&mysec){room.emit('secret',{t:mysec});$('dmine').textContent='Revealed to your partner.'}};
-const _sk=$('skip').onclick;
-$('skip').onclick=()=>{if(mode==='duet'){$('dcard').click();return}outcome('skipped');_sk()};
+const localSkip=$('skip').onclick;
+$('skip').onclick=()=>{outcome('skipped');localSkip()};
 
 // Interface state. Keep existing browser storage keys so saved cards survive deployment.
 function showToast(message){let toast=document.getElementById('toast');if(!toast){toast=document.createElement('div');toast.id='toast';toast.setAttribute('role','status');document.body.append(toast)}toast.textContent=message;toast.classList.add('visible');clearTimeout(showToast.timeout);showToast.timeout=setTimeout(()=>toast.classList.remove('visible'),3200)}
@@ -589,7 +557,7 @@ $('cu').addEventListener('keydown',e=>{if(e.key==='Enter')$('cadd').click()});
   if(!client){window.location.replace('index.html?setup=1');return}
   const {data,error}=await client.auth.getUser();
   if(error||!data.user){window.location.replace('index.html');return}
-  accountUser=data.user;authRender();document.documentElement.classList.remove('auth-pending');trackUsage('session_start');
+  accountUser=data.user;authRender();document.documentElement.classList.remove('auth-pending');trackUsage('session_start');document.dispatchEvent(new Event('kama:auth-ready'));
  }catch(error){window.location.replace('signin.html?connection=1')}
 })();
 
