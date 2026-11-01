@@ -55,7 +55,8 @@ with sync_playwright() as p:
  b=p.chromium.launch(executable_path='/usr/bin/chromium',headless=True,args=['--no-sandbox']);server=Server();pages=[];contexts=[];errors=[]
  def make(user,width=1440,height=1000):
   c=b.new_context(viewport={'width':width,'height':height},reduced_motion='reduce');contexts.append(c)
-  c.route('https://cdn.jsdelivr.net/**',lambda route:route.fulfill(status=200,content_type='application/javascript',body=STUB.replace('USER',json.dumps(user))))
+  c.add_init_script("localStorage.setItem('kama_age_confirmed',String(Date.now()));localStorage.setItem('kama_how_seen','1');")
+  c.route('**/assets/vendor/supabase.js',lambda route:route.fulfill(status=200,content_type='application/javascript',body=STUB.replace('USER',json.dumps(user))))
   page=c.new_page();page.on('pageerror',lambda e:errors.append(str(e)));page.expose_binding('duetFixture',lambda source,body:server.call(user,body));page.goto(BASE+'game.html');page.wait_for_function("!document.documentElement.classList.contains('auth-pending')");page.wait_for_timeout(150);pages.append(page);return page
  def sync():
   if server.room:
