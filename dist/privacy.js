@@ -18,11 +18,12 @@
   byId('resumePlay').onclick=()=>{byId('pauseDialog').close()};
   byId('pauseDialog').addEventListener('close',()=>document.documentElement.classList.remove('play-paused'));
   byId('pauseHide').onclick=hide;
+  document.addEventListener('visibilitychange',()=>{if(document.documentElement.classList.contains('play-paused')&&ac)ac.suspend().catch(()=>{})});
   document.addEventListener('keydown',event=>{
     if(event.key==='Escape'&&!event.defaultPrevented&&!document.querySelector('dialog[open]')){event.preventDefault();hide()}
   });
   async function clearDevice(){
-    try{await auth()?.signOut({scope:'local'})}catch{}
+    try{await Promise.race([auth()?.signOut({scope:'local'}),new Promise(resolve=>setTimeout(resolve,1500))])}catch{}
     for(const storage of [localStorage,sessionStorage]){
       const keys=[];for(let i=0;i<storage.length;i++)keys.push(storage.key(i));
       const project=new URL(window.KAMA_SUPABASE_CONFIG.url).hostname.split('.')[0];
