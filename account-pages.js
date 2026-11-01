@@ -28,7 +28,7 @@ document.getElementById('signupForm').addEventListener('submit',async event=>{
   status.textContent='Creating account…';
   const submit=event.target.querySelector('button[type=submit]');submit.disabled=true;
   try{
-    const {data,error}=await window.kamaSupabase.auth.signUp({email:document.getElementById('email').value.trim(),password:document.getElementById('password').value,options:{emailRedirectTo:new URL('game.html',window.location.href).href,data:{usage_tracking:document.getElementById('tracking').checked}}});
+    const {data,error}=await window.kamaSupabase.auth.signUp({email:document.getElementById('email').value.trim(),password:document.getElementById('password').value,options:{emailRedirectTo:new URL('game.html',window.location.href).href,data:{usage_tracking:false}}});
     if(error)throw error;
     if(data.session){if(document.getElementById('tracking').checked)await window.kamaTrack('session_start').catch(()=>{});document.getElementById('successTitle').textContent='Account created';document.getElementById('successText').textContent='Your evening is waiting.'}
     else{document.getElementById('successTitle').textContent='Check your email';document.getElementById('successText').textContent='Tap the confirmation link in your email, then sign in.';document.getElementById('continue').href='signin.html';document.getElementById('continue').textContent='Sign in'}
@@ -36,4 +36,15 @@ document.getElementById('signupForm').addEventListener('submit',async event=>{
   }catch(error){status.textContent=error.message||'Could not create account.'}finally{submit.disabled=false}
 });
 
+}
+if(document.getElementById('resetForm')){
+  document.getElementById('resetForm').onsubmit=async event=>{
+    event.preventDefault();const status=document.getElementById('resetStatus'),button=document.getElementById('resetSend');button.disabled=true;
+    try{
+      if(!window.kamaSupabase)throw new Error('Account service is unavailable. Try again later.');
+      const {error}=await window.kamaSupabase.auth.resetPasswordForEmail(document.getElementById('resetEmail').value.trim(),{redirectTo:new URL('game.html',location.href).href});
+      if(error)throw error;
+      status.textContent='If an account exists, a reset link will arrive by email. Check your spam folder too.';
+    }catch(error){status.textContent=error.status===429?'Please wait before requesting another link.':'Could not request a reset link. Try again later.'}finally{button.disabled=false}
+  };
 }

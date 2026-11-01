@@ -69,11 +69,11 @@ function show(c){
   cur=c;clearInterval(tid);tid=null;left=c.s;
   outcomeRecorded=false;$('outcomeStatus').textContent='';$('forfeit').classList.add('hidden');['done','failed'].forEach(id=>$(id).disabled=false);
   $('card').classList.remove('hidden');
-  $('art').innerHTML=imgs[c.n]?`<img src="${imgs[c.n]}" alt="">`:art(c);
+  if(typeof imgs[c.n]==='string'&&/^data:image\/jpeg;base64,[A-Za-z0-9+/=]+$/.test(imgs[c.n])){const image=new Image();image.alt='Your card image';image.src=imgs[c.n];$('art').replaceChildren(image)}else $('art').innerHTML=art(c);
   const heatTag=c.k==='Wind-down'?'Wind-down':['Date night','Warm-up','Heat','Fire'][c.l];
   $('tag').textContent=heatTag+(c.k&&c.k!==heatTag?' · '+c.k:'');updFav();
   $('name').textContent=c.n;$('text').textContent=c.t;$('truthAnswer').classList.toggle('hidden',c.k!=='Truth'&&!c.q);$('answer').value='';
-  const hw=HOW[c.n],hb=$('how');
+  const hw=Object.hasOwn(HOW,c.n)?HOW[c.n]:null,hb=$('how');
   if(hw){$('howContent').innerHTML='<ol>'+hw.map(s=>'<li>'+s+'</li>').join('')+'</ol><p>Stay comfortable. Pause or swap any time.</p>';hb.open=false;hb.classList.remove('hidden')}else hb.classList.add('hidden');
   turn();tick();$('start').textContent='Start timer';
 }
@@ -212,7 +212,7 @@ TD.desire[2].push("Let your partner choose a fabric or soft object, then use it 
 TD.desire[3].push("Choose a favorite Kamasutra pose and recreate its closeness in a comfortable, fully clothed version; trade who leads.","Invite your partner to choose a song, then explore a slow dance that grows more intimate only as you both want.","Offer a warm or cool sensation on your partner’s hand or forearm and ask which they prefer; avoid extreme temperatures.","Let your partner arrange pillows and guide you into a position that feels comfortable; stay there and kiss for a while.","Take turns giving a one-minute spoken description of a fantasy date or sensual scene, then choose one detail to act out together.","Ask your partner to choose a blindfolded or eyes-open version of gentle touch; let them guide each sensation.","Set a two-minute timer: one partner gives affectionate attention while the other simply receives, then switch.","Invite your partner to show you a favorite way to be kissed or held, then mirror it back to them.","Choose one piece of clothing or accessory for your partner to wear or remove, asking first and making the reveal playful.","If you both want intimate touch, let the receiver guide your hand and pace; switch roles only if both want to.");
 function drawTD(kind){
   lastKind=kind;
-  const question=promptPicker.take(TD[kind][level]||TD[kind][1],{avoid:cur?.t});
+  const question=promptPicker.take((TD[kind][level]||TD[kind][1]).filter(t=>ok({n:kind,t})),{avoid:cur?.t});
   if(!question){showToast('No prompts match this section.');return}
   show({l:level,k:kind==='truth'?'Truth':'Desire',n:kind==='truth'?'Truth':'Desire',t:question,s:kind==='truth'?60:120});
 }
@@ -281,6 +281,7 @@ function cancelRoll(){
 }
 $('roll').onclick=()=>{
  if(rolling||mode!=='dice')return;
+ if(off.size||names().some((_,i)=>Object.keys(TH).some(k=>boundaryValue(i,k)!=='yes'))){showToast('Use Cards or Truth / Desire with theme boundaries. Dice results are not theme-filtered.');return}
  clearInterval(dt);dt=null;$('dctl').classList.add('hidden');
  rolling=true;$('roll').disabled=true;$('roll').setAttribute('aria-busy','true');
  const P=pool(PARTS),A=pool(ACTS),fire=level===3?pick(FIRE_PAIRS):null;let n=0;
@@ -314,9 +315,11 @@ $('start').onclick=()=>{
 $('photo').onclick=()=>$('file').click();
 $('file').onchange=e=>{
  const file=e.target.files[0],target=cur;e.target.value='';if(!file||!target)return;
+ if(!['image/jpeg','image/png','image/webp'].includes(file.type)||file.size>8*1024*1024){showToast('Choose a JPEG, PNG or WebP image up to 8 MB.');return}
  const image=new Image(),url=URL.createObjectURL(file);
  image.onload=()=>{
   try{
+   if(!image.width||!image.height||image.width*image.height>40000000)throw new Error('Image dimensions are too large.');
    const scale=Math.min(1,640/Math.max(image.width,image.height)),canvas=document.createElement('canvas');
    canvas.width=Math.max(1,Math.round(image.width*scale));canvas.height=Math.max(1,Math.round(image.height*scale));
    canvas.getContext('2d').drawImage(image,0,0,canvas.width,canvas.height);
@@ -428,7 +431,30 @@ CARDS.splice(0,CARDS.length,...distinctCards);
 // themes
 const TH={"Massage":/massage|oil|silk/i,"Sensory play":/blindfold|feather|ice/i,"Talking & whispers":/whisper|tell me|name/i,"Traditional positions":null,"Dancing & romance":/dance|gaze|eyes open/i,"Taking control":/lead|control|role/i};
 const off=new Set();
-function ok(c){for(const k of off){const r=TH[k];if(k==="Traditional positions"?c.k==="Traditional":r&&r.test(c.n+' '+c.t))return false}return true}
+const rawBoundaries=ld('kama_boundaries',[]);
+let boundaries=Array.isArray(rawBoundaries)?rawBoundaries:[];
+function themeMatches(c,k){const r=TH[k];return k==='Traditional positions'?c.k==='Traditional':!!r&&r.test(c.n+' '+c.t)}
+function boundaryValue(i,k){const v=boundaries[i]?.[k];return ['yes','maybe','no'].includes(v)?v:'yes'}
+function ok(c){
+  for(const k of Object.keys(TH))if(themeMatches(c,k)&&(off.has(k)||names().some((_,i)=>boundaryValue(i,k)==='no')))return false;
+  return true;
+}
+function needsBoundaryCheck(c){return names().some((_,i)=>Object.keys(TH).some(k=>boundaryValue(i,k)==='maybe'&&themeMatches(c,k)))}
+function renderBoundaries(){
+  const box=$('boundaryPlayers');box.replaceChildren();
+  names().forEach((name,i)=>{
+    const section=document.createElement('fieldset'),legend=document.createElement('legend');legend.textContent=name;section.append(legend);
+    Object.keys(TH).forEach((k,j)=>{
+      const row=document.createElement('div');row.className='boundary-row';const label=document.createElement('label'),select=document.createElement('select');select.id='boundary-'+i+'-'+j;label.htmlFor=select.id;label.textContent=k;
+      [['yes','Yes'],['maybe','Maybe'],['no','No']].forEach(([value,text])=>{const option=document.createElement('option');option.value=value;option.textContent=text;select.append(option)});
+      select.value=boundaryValue(i,k);select.onchange=()=>{boundaries[i]??={};boundaries[i][k]=select.value;sv('kama_boundaries',boundaries)};row.append(label,select);section.append(row);
+    });box.append(section);
+  });
+}
+document.querySelectorAll('[data-open=boundariesDialog]').forEach(button=>button.addEventListener('click',renderBoundaries));
+$('boundariesDialog').addEventListener('toggle',()=>{if($('boundariesDialog').open)renderBoundaries()});
+$('boundariesDialog').addEventListener('close',()=>{if(mode!=='duet'&&cur&&!ok(cur)){clearInterval(tid);tid=null;$('card').classList.add('hidden');showToast('That card is outside your current boundaries. Draw another.')}});
+
 $('chips').innerHTML=Object.keys(TH).map(k=>'<label><input type="checkbox" checked data-t="'+k+'">'+k+'</label>').join('');
 $('chips').onchange=e=>{const k=e.target.dataset.t;e.target.checked?off.delete(k):off.add(k)};
 
@@ -449,10 +475,10 @@ function renderGateButtons(playerNames){
 show=function(c){
   const nw=c!==cur;_s2(c);if(!nw)return;
   const cd=$('card');cd.classList.remove('flip');void cd.offsetWidth;cd.classList.add('flip');
-  if(c.l===3||c.wild){
+  if(c.l===3||c.wild||needsBoundaryCheck(c)){
     const n=names();gOk=n.map(()=>0);cd.classList.add('locked');
     renderGateButtons(n);
-    $('gnote').textContent='A yes from everyone before we reveal.';
+    $('gateHeat').textContent=['Date night','Warm-up','Heat','Fire'][c.l]+(c.wild?' · Mystery':'');$('gnote').textContent='A yes from everyone before we reveal.';
     clearInterval(tid);tid=null;left=c.s;tick();$('start').textContent='Start timer';
   }else cd.classList.remove('locked');
   if(++nDraw%4===0){$('chkt').textContent=pick(CHK);$('chk2').classList.remove('hidden')}
@@ -474,7 +500,7 @@ function evNext(){
   si++;
   if(si>=ST.length){si=-1;$('evp').textContent='Your evening is complete. Hold each other close.';$('evb').textContent='Begin again';return}
   const s=ST[si];
-  let p=s==='w'?CARDS.filter(c=>c.k==='Wind-down'):CARDS.filter(c=>c.l===s&&c.k!=='Date night'&&c.k!=='Wind-down'&&ok(c));
+  let p=s==='w'?CARDS.filter(c=>c.k==='Wind-down'&&ok(c)):CARDS.filter(c=>c.l===s&&c.k!=='Date night'&&c.k!=='Wind-down'&&ok(c));
   if(!p.length){si--;showToast('No cards match this stage. Adjust your themes.');return}
   if(s!=='w')level=s;
   show(promptPicker.take(p,{avoid:cur?.t}));
@@ -588,7 +614,7 @@ setMode=function(m){
 };
 let sessionRound=0;
 const gameShow=show;
-show=function(c){const fresh=c!==cur;gameShow(c);$('emptyState').classList.add('hidden');if(fresh)sessionRound++;$('roundLabel').textContent='Round '+String(sessionRound).padStart(2,'0');renderMood();document.documentElement.dataset.playing='true';if(fresh){const target=$('card').classList.contains('locked')?$('gate').querySelector('h2'):$('name');target.tabIndex=-1;target.focus({preventScroll:true});if(matchMedia('(max-width: 979px)').matches)requestAnimationFrame(()=>$('card').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}))}};
+show=function(c){if(mode!=='duet'&&!ok(c)){showToast('This card is outside your current boundaries.');return}const fresh=c!==cur;gameShow(c);$('emptyState').classList.add('hidden');if(fresh)sessionRound++;$('roundLabel').textContent='Round '+String(sessionRound).padStart(2,'0');renderMood();document.documentElement.dataset.playing='true';if(fresh){const target=$('card').classList.contains('locked')?$('gate').querySelector('h2'):$('name');target.tabIndex=-1;target.focus({preventScroll:true});if(matchMedia('(max-width: 979px)').matches)requestAnimationFrame(()=>$('card').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'}))}};
 const gameEvening=evNext;
 evNext=function(){gameEvening();document.querySelectorAll('#eveningProgress span').forEach((s,i)=>s.classList.toggle('active',si>=i));renderMood()};
 $('evb').onclick=evNext;

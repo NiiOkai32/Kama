@@ -94,8 +94,7 @@ The build copies the site and assets into `dist`, using the public values in
 key is explicitly present. Never use a service-role or secret key in this site.
 
 The existing `netlify.toml` still uses `node build.mjs` and publishes `dist`.
-Supabase Auth uses the existing hosted service; its JavaScript client still
-loads from the same jsDelivr URL as the uploaded version. No database changes
+Supabase Auth uses the existing hosted service; its JavaScript client is now self-hosted and pinned. No database changes
 are required by this interface update. The existing SQL migration is retained
 in the source archive for reference and is not included in the public build.
 
@@ -114,3 +113,9 @@ was not verified. The original publishable key is preserved; the malformed proje
 ## Optional forfeits
 
 Choose **Couldn’t complete** on a card, then **Playful**, **Drink** (one sip of any drink), or **Custom**. Custom wording is saved on that device for reuse and rendered as plain text. **Done** finishes the forfeit without counting the original task as completed; **Skip** dismisses it. Each task records its outcome once. Remote Duet retains its existing shared-completion flow.
+
+## Privacy and account safety
+
+The current build adds a recurring 18+ self-declaration, first-visit instructions, sticky Pause / Stop and Hide controls, device-data clearing, password recovery, password-confirmed account deletion, per-player local theme boundaries and validated JSON custom-deck backups. Account-linked gameplay analytics are disabled. Local storage is shared across accounts using the same browser profile. See [the privacy notice](privacy.html) and [the suggestions review](docs/SECURITY-REVIEW.md) for limits and remaining provider settings.
+
+The Supabase client is self-hosted at version 2.118.0. The build writes CSP and no-referrer metadata into root pages and dist, and Netlify response headers add frame, MIME and permission protections. Server credentials remain in Edge Function environment variables. The publishable browser key is intentionally public.
