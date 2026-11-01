@@ -108,3 +108,7 @@ modals, night mode, and signed-out redirects. Additional checks covered keyboard
 Auth screen success, error and email-confirmation states were tested with a
 mocked service. No live account was created and live Supabase authentication
 was not verified. The original publishable key is preserved; the malformed project URL has been corrected against the connected project metadata.
+
+## Optional forfeits
+
+Choose **Couldn’t complete** on a card, then **Playful**, **Drink** (one sip of any drink), or **Custom**. Custom wording is saved on that device for reuse and rendered as plain text. **Done** finishes the forfeit without counting the original task as completed; **Skip** dismisses it. Each task records its outcome once. Remote Duet retains its existing shared-completion flow.

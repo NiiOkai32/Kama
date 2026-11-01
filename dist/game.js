@@ -492,7 +492,19 @@ const FORFEITS=[
   'Do a playful 10-second dance for the group.',
   'Let someone else choose a cozy song for the next round.'
 ];
-function nextForfeit(){ $('forfeitText').textContent=pick(FORFEITS); }
+const savedForfeit=ld('kama_custom_forfeit','');
+$('forfeitCustom').value=typeof savedForfeit==='string'?savedForfeit.slice(0,240):'';
+function nextForfeit(){
+  const type=$('forfeitType').value;
+  const custom=$('forfeitCustom').value.trim();
+  $('forfeitCustomField').classList.toggle('hidden',type!=='custom');
+  $('forfeitAnother').classList.toggle('hidden',type!=='playful');
+  $('forfeitDone').disabled=type==='custom'&&!custom;
+  $('forfeitText').textContent=type==='drink'?'Take one sip of a drink of your choice.':type==='custom'?(custom||'Write your forfeit above.'):pick(FORFEITS);
+}
+$('forfeitType').onchange=nextForfeit;
+$('forfeitCustom').oninput=()=>{sv('kama_custom_forfeit',$('forfeitCustom').value);nextForfeit()};
+$('forfeitDone').onclick=()=>{$('forfeit').classList.add('hidden');$('outcomeStatus').textContent='Forfeit done. Ready for another?'};
 function outcome(kind){if(outcomeRecorded)return;clearInterval(tid);tid=null;$('start').textContent='Start timer';outcomeRecorded=true;results[kind]++;sv('kama_results',results);if(kind==='completed'){done++;sv('kama_done',done)}stat();trackUsage('outcome_'+kind);$('outcomeStatus').textContent=kind==='completed'?'Nicely played. Ready for another?':kind==='failed'?'Choose a forfeit, or skip it.':'Skipped. Always your choice.';if(kind==='failed'){nextForfeit();$('forfeit').classList.remove('hidden')}['done','failed'].forEach(id=>$(id).disabled=true)}
 $('done').onclick=()=>outcome('completed');$('failed').onclick=()=>outcome('failed');
 $('forfeitAnother').onclick=nextForfeit;
