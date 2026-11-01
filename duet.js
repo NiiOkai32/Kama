@@ -48,6 +48,7 @@
     status(room.guest_id?'Your room is private. Draw a card when you’re ready.':'Your room is ready. Invite your partner.');updateConnection();
     if(!room.card){byId('card').classList.add('hidden');return}
     const both=room.host_ready&&room.guest_ready;
+    byId('gateHeat').textContent=['Date night','Warm-up','Heat','Fire'][room.card.l];
     if(lastCardId!==room.card_id){
       lastCardId=room.card_id;level=room.card.l;renderMood();privatePrompt='';byId('duetPrivateText').textContent='Only you can see it until you reveal it.';
       const auto=byId('auto').checked;byId('auto').checked=false;
@@ -135,7 +136,7 @@
     }catch(error){status('Duet is being prepared. Local play is available.');byId('duetCreate').classList.add('hidden')}
     try{const invite=sessionStorage.getItem('kama_duet_invite');if(invite){byId('duetCode').value=invite;setMode('duet')}}catch{}
   }
-  window.kamaDuet={getNames:()=>client?.room?[client.room.host_name,client.room.guest_name||'Partner']:null,get active(){return active()},get room(){return client?.room}};
+  window.kamaDuet={pause:()=>{if(client?.room?.timer_ends_at)client.command('timer_pause').catch(error=>showToast(errorMessage(error)))},getNames:()=>client?.room?[client.room.host_name,client.room.guest_name||'Partner']:null,get active(){return active()},get room(){return client?.room}};
   document.addEventListener('kama:auth-ready',initialize,{once:true});if(accountUser)initialize();
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)client?.refresh()});
   window.addEventListener('pagehide',()=>{clearInterval(clockTick);clockTick=null;client?.stop()});

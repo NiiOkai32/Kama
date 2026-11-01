@@ -5,16 +5,16 @@
     window.kamaSupabase = null;
     return;
   }
-  if (!/^https:\/\/[a-z0-9]{20}\.supabase\.co$/.test(config.url || "") || !config.publishableKey || config.publishableKey.includes("REPLACE_ME")) {
+  if (!/^https:\/\/[a-z0-9]{20}\.supabase\.co$/.test(config.url || "") || typeof config.publishableKey !== 'string' || !config.publishableKey.startsWith('sb_publishable_') || config.publishableKey.includes("REPLACE_ME")) {
     window.kamaSupabaseError = "The account connection is not configured correctly. Please contact the site owner.";
     window.kamaSupabase = null;
     return;
   }
   window.kamaSupabase = window.supabase.createClient(config.url, config.publishableKey);
-  window.kamaTrack = async (event) => {
-    const { data: { user } } = await window.kamaSupabase.auth.getUser();
-    if (!user || user.user_metadata?.usage_tracking !== true) return;
-    const { error } = await window.kamaSupabase.from("usage_events").insert({ user_id: user.id, event });
-    if (error) console.warn("Kama usage event was not recorded.");
-  };
+  window.kamaRecovery=new URLSearchParams(location.hash.slice(1)).get('type')==='recovery';
+  window.kamaSupabase.auth.onAuthStateChange?.(event=>{
+    if(event==='PASSWORD_RECOVERY'){window.kamaRecovery=true;setTimeout(()=>window.dispatchEvent(new Event('kama:recovery')),0)}
+  });
+  // Account-linked gameplay analytics are disabled, including old callers.
+  window.kamaTrack = async () => {};
 })();
