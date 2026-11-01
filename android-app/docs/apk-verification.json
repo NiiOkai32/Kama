@@ -1,0 +1,17 @@
+{
+  "version": "1.0.0",
+  "applicationId": "io.github.niiokai32.kama",
+  "minSdk": 26,
+  "targetSdk": 35,
+  "apkBytes": 154539,
+  "apkSha256": "e81ffd7e33823ea216dcf823f1b527e4c3093b31bee731290b1280a4ad20089c",
+  "verifiedBundledFiles": 33,
+  "releaseBuild": "passed",
+  "androidLint": "passed, zero errors, three warnings",
+  "apkSignature": "v2 verified",
+  "zipAlignment": "verified",
+  "webLayerFixtureTests": "passed",
+  "physicalOrEmulatorTests": "not available",
+  "liveAuthRealtimeTests": "not performed",
+  "paymentsEnabled": false
+}

@@ -1,0 +1,40 @@
+plugins { id 'com.android.application' }
+
+def signingFile = System.getenv('KAMA_SIGNING_PROPERTIES')
+def secrets = new Properties()
+if (signingFile) { file(signingFile).withInputStream { secrets.load(it) } }
+
+android {
+    namespace 'io.github.niiokai32.kama'
+    compileSdk 35
+    defaultConfig {
+        applicationId 'io.github.niiokai32.kama'
+        minSdk 26
+        targetSdk 35
+        versionCode 1
+        versionName '1.0.0'
+    }
+    buildFeatures { buildConfig true }
+    if (signingFile) {
+        signingConfigs {
+            release {
+                storeFile file(secrets['storeFile'])
+                storePassword secrets['storePassword']
+                keyAlias secrets['keyAlias']
+                keyPassword secrets['keyPassword']
+            }
+        }
+    }
+    buildTypes {
+        release {
+            debuggable false
+            minifyEnabled false
+            if (signingFile) { signingConfig signingConfigs.release }
+        }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    lint { abortOnError true }
+}
