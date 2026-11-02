@@ -1,0 +1,8 @@
+kama.sqlite3*
+__pycache__/
+tests/__pycache__/
+.python/
+.uv-cache/
+.env
+.env.*
+!.env.example
