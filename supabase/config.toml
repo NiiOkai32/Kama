@@ -1,4 +1,11 @@
+[functions.duet]
+# The handler independently validates the user's access token with Auth /user.
+verify_jwt = false
 
 [functions.account-delete]
 # Body validates the session with Auth and requires password reauthentication.
+verify_jwt = false
+
+[functions.duet-price]
+# Public product-price preview only; no identity, database or payment operations.
 verify_jwt = false

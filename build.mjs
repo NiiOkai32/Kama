@@ -6,7 +6,7 @@ import { createHash } from 'node:crypto';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const dist = path.join(root, 'dist');
-const files = ['index.html', 'game.html', 'signup.html', 'signin.html', 'design.css', 'game.css', 'auth.css', 'auth.js', 'game.js', 'random.js', 'questions.js', 'account-pages.js', 'device.js', 'responsive.css', 'assets', 'reset.html', 'privacy.html', 'quiet.html', 'quiet.css', 'privacy.css', 'privacy.js', 'safety-gate.js'];
+const files = ['index.html', 'game.html', 'signup.html', 'signin.html', 'design.css', 'game.css', 'auth.css', 'auth.js', 'game.js', 'random.js', 'questions.js', 'account-pages.js', 'device.js', 'duet-client.js', 'duet.js', 'duet-price.js', 'duet.css', 'responsive.css', 'assets', 'reset.html', 'privacy.html', 'quiet.html', 'quiet.css', 'privacy.css', 'privacy.js', 'safety-gate.js'];
 // Only the explicitly named public build variables override the uploaded site config.
 // Do not use unrelated workspace credentials when preparing this existing site.
 let saved = {};
