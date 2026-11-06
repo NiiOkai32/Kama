@@ -4,7 +4,8 @@ import {fileURLToPath} from 'node:url';
 import {createHash} from 'node:crypto';
 
 const root=path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-const supplied=process.argv[2];
+const supplied=process.argv[2],sourceCommit=process.argv[3];
+if(!/^[a-f0-9]{40}$/.test(sourceCommit||''))throw new Error('Pass the web source commit SHA as the third argument.');
 if(!supplied)throw new Error('Pass the latest Kama web dist directory.');
 const source=path.resolve(supplied),destination=path.join(root,'android/app/src/main/assets/web');
 for(const name of ['game.html','game.js','questions.js','duet.js','privacy.js','supabase-config.js'])if(!existsSync(path.join(source,name)))throw new Error('Missing complete web build: '+name);
@@ -30,5 +31,5 @@ html=html.replace('<h2>Your account</h2>','<h2>Android app</h2><p>All game conte
 writeFileSync(notice,html);
 const records=[];
 function scan(dir){for(const name of readdirSync(dir,{withFileTypes:true})){const p=path.join(dir,name.name);if(name.isDirectory())scan(p);else records.push({path:path.relative(destination,p),sha256:createHash('sha256').update(readFileSync(p)).digest('hex')})}}
-scan(destination);writeFileSync(path.join(root,'docs/bundled-assets.json'),JSON.stringify({sourceCommit:'23921b2fc8c9392757f97d63bc95c2306b4dc451',files:records},null,2)+'\n');
+scan(destination);writeFileSync(path.join(root,'docs/bundled-assets.json'),JSON.stringify({sourceCommit,files:records},null,2)+'\n');
 console.log('Bundled '+records.length+' offline web files. Server-only sources and signing material are excluded.');

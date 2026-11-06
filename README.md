@@ -4,7 +4,7 @@ A responsive card game with 503 supplied prompts integrated into the appropriate
 
 **[Download the Duet review build](https://github.com/NiiOkai32/Kama/raw/refs/heads/duet-premium/downloads/kama-netlify-dist.zip)**
 
-Duet adds private online rooms for two signed-in players, shared prompts, readiness and timers. The proposed membership is **US$1.99/month**; one paying host covers their invited partner. **Checkout is disabled** pending merchant approval and billing integration. [Setup and current limits](docs/DUET.md).
+Duet adds private online rooms for two signed-in players, shared prompts, readiness and timers. Membership is **US$2.99/month**; one paying host covers their invited partner. **Checkout is disabled** pending merchant approval and billing integration. [Setup and current limits](docs/DUET.md).
 
 Extract the ZIP and drag its **dist** folder into the **Deploys** tab of your existing Netlify site. The full source and built `dist` are included in this branch.
 
@@ -117,3 +117,7 @@ Choose **Couldn’t complete** on a card, then **Playful**, **Drink** (one sip o
 The current build adds a recurring 18+ self-declaration, first-visit instructions, sticky Pause / Stop and Hide controls, device-data clearing, password recovery, password-confirmed account deletion, per-player local theme boundaries and validated JSON custom-deck backups. Account-linked gameplay analytics are disabled. Local storage is shared across accounts using the same browser profile. See [the privacy notice](privacy.html) and [the suggestions review](docs/SECURITY-REVIEW.md) for limits and remaining provider settings.
 
 The Supabase client is self-hosted at version 2.118.0. The build writes CSP and no-referrer metadata into root pages and dist, and Netlify response headers add frame, MIME and permission protections. Server credentials remain in Edge Function environment variables. The publishable browser key is intentionally public.
+
+## USD and GHS pricing
+
+Duet is US$2.99/month, with a GHS preview derived from the latest published daily ExchangeRate-API rate. The display refreshes while the offer is visible; no stale offline cedi estimate is shown. Checkout remains disabled. [Rate source, freshness and checkout requirements](docs/PRICING.md).

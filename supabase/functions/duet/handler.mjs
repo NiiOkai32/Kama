@@ -1,3 +1,4 @@
+import {duetOffer} from '../_shared/duet-pricing.mjs';
 // No payment provider is enabled by this handler. Entitlements are server-owned.
 const ACTIONS = new Set(['membership','create','join','resume','status','invite','leave','draw','ready','timer_start','timer_pause','complete','swap','reveal','checkout']);
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -84,7 +85,7 @@ export function createDuetHandler({ env, fetcher=fetch, cryptoImpl=globalThis.cr
         if(status)throw new DuetError(data.message,status);
         throw new DuetError('Duet is temporarily unavailable. Please try again.',503);
       }
-      if(command.action==='membership')data.offer={currency:'USD',amount_minor:199,interval:'month',host_covers_partner:true,checkout_enabled:false};
+      if(command.action==='membership')data.offer=duetOffer();
       if(inviteToken&&command.action!=='join')data.invite_token=inviteToken;
       return reply(data);
     }catch(error){

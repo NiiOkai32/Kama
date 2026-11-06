@@ -1,22 +1,22 @@
-# Kama for Android — 1.0.0
+# Kama for Android — 1.0.1
 
-**[Download the signed APK](https://github.com/NiiOkai32/Kama/raw/refs/heads/android-apk/downloads/kama-android-v1.0.0.apk)**
+**[Download the signed APK](https://github.com/NiiOkai32/Kama/raw/refs/heads/android-apk/downloads/kama-android-v1.0.1.apk)**
 
 Android 8.0 or newer (API 26+), with Android System WebView 105+; a current WebView is recommended. Universal Java/WebView APK, with no CPU-specific native library. This is a direct-install APK, not a Play Store publication.
 
 ## Install
 
-Download `kama-android-v1.0.0.apk` on your Android phone, open it, and allow installation from that browser/file app if Android asks. No Netlify deployment, server build or merchant account is needed to install it.
+Download `kama-android-v1.0.1.apk` on your Android phone, open it, and allow installation from that browser/file app if Android asks. No Netlify deployment, server build or merchant account is needed to install it.
 
 Choose **Play on this device** for offline local play. The complete game decks, supplied questions, local game modes, drink/custom/playful forfeits, images, favourites, custom cards, boundaries, deck backups and privacy controls are bundled. The APK does not download the game homepage to work. Local play does not start an Auth client or send backend requests.
 
-Sign in with internet access for accounts and remote Duet. The APK includes Duet's interface and server connection; hosting still requires an active server-side membership and invitations still require two signed-in accounts. The proposed US$1.99/month checkout remains **disabled**, pending merchant approval and billing implementation. No purchase, membership grant or fake entitlement is embedded in the APK. The app does not make remote multiplayer work without a network.
+Sign in with internet access for accounts and remote Duet. The APK includes Duet's interface and server connection; hosting still requires an active server-side membership and invitations still require two signed-in accounts. The proposed US$2.99/month checkout remains **disabled**, pending merchant approval and billing implementation. No purchase, membership grant or fake entitlement is embedded in the APK. The app does not make remote multiplayer work without a network.
 
 Email verification and password reset links use the existing hosted Kama website in the phone's browser. Finish the email action there, then return to the app and sign in. Browser and app saves/sign-in are separate profiles. No app-link/deep-link verification has been registered for the public GitHub Pages domain.
 
 ## Included Android integration
 
-- All 33 web files ship in the APK. Source snapshot: `23921b2fc8c9392757f97d63bc95c2306b4dc451` from `duet-premium`, plus Android-only adapters.
+- All 34 web files ship in the APK. Source snapshot: `22d39861d300d2171ae9cb1ed2a6844888cce600` from `duet-premium`, plus Android-only adapters.
 - Bundled pages are intercepted under the owner's existing `https://niiokai32.github.io/Kama/` origin. This keeps Auth redirects and Edge Function CORS compatible. This WebView never falls back to fetching a remote main-frame page at that origin; missing assets return 404.
 - File imports and image changes use Android's document picker. Custom-deck exports use Save Document. No broad storage permission is requested.
 - Copy list/invitation uses an explicit clipboard bridge. The bridge exposes only app detection, writing text to the clipboard and saving a validated JSON deck through the system picker. It cannot read arbitrary files, run commands or grant membership.
@@ -32,10 +32,10 @@ Requires JDK 17, Android SDK Platform 35 and Build Tools 35, with network access
 The bundled assets are already present in `android/app/src/main/assets/web`. To update from a complete web build, run:
 
 ```sh
-node tools/prepare-web.mjs /path/to/kama/dist
+node tools/prepare-web.mjs /path/to/kama/dist WEB_COMMIT_SHA
 ```
 
-`prepare-web.mjs` makes Android-only copies. It adds offline local play, native clipboard/document exports and an Android privacy note; it preserves server authentication for Duet. Review the source snapshot recorded in `docs/bundled-assets.json` when updating to a new web revision. The script's source-commit field should be updated to the actual revision being bundled.
+`prepare-web.mjs` makes Android-only copies. It adds offline local play, native clipboard/document exports and an Android privacy note; it preserves server authentication for Duet. Review the source snapshot recorded in `docs/bundled-assets.json` when updating to a new web revision. Pass the actual 40-character Git commit SHA of the web source being bundled; it is recorded with the asset hashes.
 
 For a signed release, set `KAMA_SIGNING_PROPERTIES` to a private properties file outside the checkout:
 
@@ -65,10 +65,14 @@ The release signing certificate SHA-256 is:
 
 ## Verification and limits
 
-`assembleRelease` and `lintRelease` passed. Lint reports no errors and three non-blocking warnings (icon resource/version qualifiers and one translatable UI string). APK v2 signature and ZIP alignment verified. All 33 bundled web files match the packaged asset hashes; server sources, database files, keystores and signing credentials are absent. A pattern scan found no embedded server-secret or private-key material.
+`assembleRelease` and `lintRelease` passed. Lint reports no errors and three non-blocking warnings (icon resource/version qualifiers and one translatable UI string). APK v2 signature and ZIP alignment verified. All 34 bundled web files match the packaged asset hashes; server sources, database files, keystores and signing credentials are absent. A pattern scan found no embedded server-secret or private-key material.
 
 `python tools/check-web.py`, using Python Playwright with `/usr/bin/chromium`, verifies the packaged web layer under the app's HTTPS origin: offline entry, all local modes, optional forfeits, sign-in-gated Duet, native export/clipboard adapters, JSON import, phone/landscape/tablet layouts and privacy controls. No backend requests occurred in local play.
 
 The native Activity compiled and passed Android lint, but no Android emulator or physical phone was available in this workspace. Real installation, Android document-picker/keyboard behavior and device-specific WebView behavior have not been exercised. Native bridge calls were simulated for the web-layer checks. Live Auth/Realtime/payment tests were not performed; this workspace blocks the connected project's API hostname, and payments remain disabled. The existing provider settings and commercial Duet launch checks in `docs/SECURITY-REVIEW.md` still apply.
 
-APK SHA-256: `e81ffd7e33823ea216dcf823f1b527e4c3093b31bee731290b1280a4ad20089c`.
+APK SHA-256: `3b2748f3e5950df91dfbf60ada6418b2ada6da1e34ad423a48393d37b2132bb4`.
+
+## US$2.99 and current GHS pricing
+
+Version 1.0.1 updates Duet to US$2.99/month and adds a current GHS display from the latest published daily exchange rate. It refreshes while the offer is visible and shows the rate timestamp and attribution. No old offline cedi amount is kept; local-only play asks you to go online for the quote. Checkout remains disabled pending Paystack approval and the verified billing integration. [Pricing policy](docs/PRICING.md). Install this update over v1.0.0 to receive the new bundled UI; existing APKs do not update themselves.

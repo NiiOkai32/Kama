@@ -35,7 +35,7 @@
 <div class="duet-title-row"><div><p class="eyebrow">TWO SCREENS. ONE CONNECTION.</p><h2>Closer, from anywhere.</h2></div><span class="duet-badge">DUET +</span></div>
 <p id="duetStatus" class="duet-status" role="status" aria-live="polite">Checking your membership…</p>
 <div id="duetLobby">
-<section id="duetOffer" class="duet-offer"><div class="duet-price"><strong>$1.99</strong><span>USD / month</span></div><p>One membership. You and your partner.</p><div class="duet-benefits"><span><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#cards"/></svg> Shared cards</span><span><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#heart"/></svg> Private prompts</span><span><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#link"/></svg> Play from anywhere</span></div><button id="duetBuy" class="main" disabled>Payments coming soon <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#lock"/></svg></button><p class="duet-payment-note">Proposed monthly price. Purchasing is not open yet.</p></section>
+<section id="duetOffer" class="duet-offer"><div class="duet-price"><strong>US$2.99</strong><span>USD / month</span></div><p id="duetGhs" class="duet-ghs" role="status">Current GHS price needs internet.</p><p id="duetRateNote" class="duet-rate-note">Rates update daily. Final GHS amount is confirmed before payment.</p><a class="duet-rate-source" href="https://www.exchangerate-api.com" rel="noreferrer">Rates by ExchangeRate-API</a><p>One membership. You and your partner.</p><div class="duet-benefits"><span><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#cards"/></svg> Shared cards</span><span><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#heart"/></svg> Private prompts</span><span><svg class="icon" aria-hidden="true"><use href="assets/icons.svg#link"/></svg> Play from anywhere</span></div><button id="duetBuy" class="main" disabled>Payments coming soon <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#lock"/></svg></button><p class="duet-payment-note">Monthly base price. Purchasing is not open yet.</p></section>
 <label for="duetName">Your name</label><input id="duetName" type="text" placeholder="What should your partner call you?" maxlength="30" autocomplete="nickname">
 <button id="duetCreate" class="main hidden">Start your private room <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#arrow"/></svg></button>
 <div class="duet-join"><h3>Invited by your partner?</h3><p>You can join their room for free.</p><label for="duetCode">Invitation link or code</label><input id="duetCode" type="text" placeholder="Paste your invitation" autocomplete="off" autocapitalize="off" spellcheck="false"><button id="duetJoin" class="ghost">Join your partner <svg class="icon" aria-hidden="true"><use href="assets/icons.svg#arrow"/></svg></button></div>
@@ -79,6 +79,6 @@
 <script src="game.js" defer></script>
 <script src="device.js" defer></script>
 <script src="duet-client.js" defer></script>
-<script src="duet.js" defer></script>
+<script src="duet.js" defer></script><script src="duet-price.js" defer></script>
 <script src="privacy.js" defer></script></body>
 </html>

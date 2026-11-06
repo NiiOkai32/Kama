@@ -1,11 +1,11 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "applicationId": "io.github.niiokai32.kama",
   "minSdk": 26,
   "targetSdk": 35,
-  "apkBytes": 154539,
-  "apkSha256": "e81ffd7e33823ea216dcf823f1b527e4c3093b31bee731290b1280a4ad20089c",
-  "verifiedBundledFiles": 33,
+  "apkBytes": 156433,
+  "apkSha256": "3b2748f3e5950df91dfbf60ada6418b2ada6da1e34ad423a48393d37b2132bb4",
+  "verifiedBundledFiles": 34,
   "releaseBuild": "passed",
   "androidLint": "passed, zero errors, three warnings",
   "apkSignature": "v2 verified",
@@ -13,5 +13,13 @@
   "webLayerFixtureTests": "passed",
   "physicalOrEmulatorTests": "not available",
   "liveAuthRealtimeTests": "not performed",
-  "paymentsEnabled": false
+  "paymentsEnabled": false,
+  "versionCode": 2,
+  "usdBaseAmountMinor": 299,
+  "priceCurrencies": [
+    "USD",
+    "GHS"
+  ],
+  "rateSourceRefresh": "daily",
+  "pricingChecks": "8 handler tests and 5 browser checks passed; live upstream not verified"
 }

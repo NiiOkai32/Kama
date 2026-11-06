@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "23921b2fc8c9392757f97d63bc95c2306b4dc451",
+  "sourceCommit": "22d39861d300d2171ae9cb1ed2a6844888cce600",
   "files": [
     {
       "path": "account-pages.js",
@@ -50,8 +50,12 @@
       "sha256": "fb9f8f32fab6299f6f4b465e13e3bf88973a28aacbf80210571eade71c001c14"
     },
     {
+      "path": "duet-price.js",
+      "sha256": "6f62e84fdb75c27800b741e3e68015f06e44caceb2851c67f7158cf34e16bbb1"
+    },
+    {
       "path": "duet.css",
-      "sha256": "fe4d64d2c2751959039dce9bf580d6ab70ced14f292f4fadd8bd4d1fd43fd38e"
+      "sha256": "e8df5918f2e8bc10a36f3ad9c20b497ec29eb3547bc19d56b6151e0152b60cf5"
     },
     {
       "path": "duet.js",
@@ -63,7 +67,7 @@
     },
     {
       "path": "game.html",
-      "sha256": "ff3154b7a11d2c976ed1cf6b6b2325d44198626382c367a045ee54b1d3484fe6"
+      "sha256": "183688ce2496956358c6cddbadf1371085cea0f5cbb9ecb380439747e0b529d3"
     },
     {
       "path": "game.js",
@@ -87,7 +91,7 @@
     },
     {
       "path": "privacy.html",
-      "sha256": "8a566dc3e830bf2bbc65820eb604a5f827b0ce345bbb8008565490850d6e0acc"
+      "sha256": "20353b56ac13cf44841f24f9acbf91689a2f420f7fec80577e5de07e0d536977"
     },
     {
       "path": "privacy.js",
