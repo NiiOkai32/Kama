@@ -1,0 +1,141 @@
+{
+  "sourceCommit": "22d39861d300d2171ae9cb1ed2a6844888cce600",
+  "files": [
+    {
+      "path": "account-pages.js",
+      "sha256": "e5b5c6f8ba78fed8f255e728daa6635b8a06e2ee36a264db4ab2ec0e05639c66"
+    },
+    {
+      "path": "assets/emblem.svg",
+      "sha256": "8aba11984be2d785fa4687b7e9d4803838e76fd500e8f741f8d334e0e5edf139"
+    },
+    {
+      "path": "assets/favicon.svg",
+      "sha256": "fc55f8d1c4b8ae617e5dd264cfc34e52db548f7c8fd2cc25ed1fe957218d42b4"
+    },
+    {
+      "path": "assets/icons.svg",
+      "sha256": "22338e1a5ed12fb730436209bd219c6bb179cafa8f6f08505f6c4cc88aaefbc7"
+    },
+    {
+      "path": "assets/vendor/LICENSE.supabase",
+      "sha256": "334dd6820e2eaeab2064e7c59001b810566728a28a41a7c1dbf69bbee17d0936"
+    },
+    {
+      "path": "assets/vendor/README.md",
+      "sha256": "e9e3978182aea9137a379739486af1335c3d79bf8c7305a9be57841894a9d638"
+    },
+    {
+      "path": "assets/vendor/supabase.js",
+      "sha256": "ee3be8de192b97cb1d73d1e95d6b82bb1f6b658c0f97c4ef757fc331996ed3d3"
+    },
+    {
+      "path": "auth.css",
+      "sha256": "9db8ffce9a8eeb33cab04e0b8a8a8052eb519cff776468e62687a395fc82e88d"
+    },
+    {
+      "path": "auth.js",
+      "sha256": "423c20f4f7ef6d402794e12c9fe87ca639dba884867b835d1cfd91ce4a6ad970"
+    },
+    {
+      "path": "design.css",
+      "sha256": "b6d5c442974e13039b6b03fcd9d4e34852ea4082c3bb14bb73b8837ebc286d06"
+    },
+    {
+      "path": "device.js",
+      "sha256": "6201059e7f61cadb6c9d4ea353053a7bd91b2a2632130973de1d87fe0e5e1181"
+    },
+    {
+      "path": "duet-client.js",
+      "sha256": "fb9f8f32fab6299f6f4b465e13e3bf88973a28aacbf80210571eade71c001c14"
+    },
+    {
+      "path": "duet-price.js",
+      "sha256": "6f62e84fdb75c27800b741e3e68015f06e44caceb2851c67f7158cf34e16bbb1"
+    },
+    {
+      "path": "duet.css",
+      "sha256": "e8df5918f2e8bc10a36f3ad9c20b497ec29eb3547bc19d56b6151e0152b60cf5"
+    },
+    {
+      "path": "duet.js",
+      "sha256": "f90504e468b4c58be01a2e559c9bd236c1e20753851b51527beb3bc7ed90f760"
+    },
+    {
+      "path": "game.css",
+      "sha256": "160e3fb9e2dfc8add6a7d21949b940f2de5919421276efa10409d591376808ff"
+    },
+    {
+      "path": "game.html",
+      "sha256": "183688ce2496956358c6cddbadf1371085cea0f5cbb9ecb380439747e0b529d3"
+    },
+    {
+      "path": "game.js",
+      "sha256": "40bd5b4501e1e845c6fb05c5d39c15a0080dbe8b315c58b24bd6d886d1891f1a"
+    },
+    {
+      "path": "index.html",
+      "sha256": "16a9024169cbf43b1c9c4c8bebaf71c954d7a9fc98182e76070b6dcc84e3be95"
+    },
+    {
+      "path": "native-shell.js",
+      "sha256": "0f68c1d4400c02d4a412416c68cb494c7c3a293f53792a99f8a8dcadc914918d"
+    },
+    {
+      "path": "native.css",
+      "sha256": "3cacb0edbf783c0952b82dbd9892b10c8254b855a39354ed1589bc23aa6d8d6d"
+    },
+    {
+      "path": "privacy.css",
+      "sha256": "b9c299d7a8a242a4c243dcaf84719fd7c4f44dc82d9f84f0299ccb0a4c01958b"
+    },
+    {
+      "path": "privacy.html",
+      "sha256": "20353b56ac13cf44841f24f9acbf91689a2f420f7fec80577e5de07e0d536977"
+    },
+    {
+      "path": "privacy.js",
+      "sha256": "1bf24264d196cf2b8bcbf4fcafceec05bd5fd1a55b6e25472dbe193904bc5b11"
+    },
+    {
+      "path": "questions.js",
+      "sha256": "31e42a33399b55a6d5eed6fb5ec27dd5a50f8c16921143452ecd2ca5a7465022"
+    },
+    {
+      "path": "quiet.css",
+      "sha256": "9ed3445c24a816070f0dd3c6005fe65ad4a37bdc46dc20bcd7d00a081a0da33b"
+    },
+    {
+      "path": "quiet.html",
+      "sha256": "8769a03564a2c5aa07478c467d5a1190b3c39309ee8591fad5402008896e9058"
+    },
+    {
+      "path": "random.js",
+      "sha256": "6abfcf208d0458f4b4d4a176fcacb4bfd4fe846ef29b4236616ee2ec17dddde1"
+    },
+    {
+      "path": "reset.html",
+      "sha256": "da104f0494e4297b1ace4ffc3b2fd4621a1066252d5cf60822f2b0de57d65b89"
+    },
+    {
+      "path": "responsive.css",
+      "sha256": "716d9a594f00079338aac1aecd59bf38567e5c7eec9bdd69bff102c2fbd4e8d0"
+    },
+    {
+      "path": "safety-gate.js",
+      "sha256": "4f83b03518b0f9ca9ae597019608b56f36b6c44a260334f2ab94b0f86879857f"
+    },
+    {
+      "path": "signin.html",
+      "sha256": "7dba84727025607ad5d58893cb7f8ff7811de5bf4ca44229bcda66762d3e7a70"
+    },
+    {
+      "path": "signup.html",
+      "sha256": "a37f5f6193aba01a8101751ed8e1b4b87e751a013daa4cb43a4ced0f54e5d0e4"
+    },
+    {
+      "path": "supabase-config.js",
+      "sha256": "f029acf09e448376255c233216277f6a0db86daa14fef3d3069d92be048140e4"
+    }
+  ]
+}
