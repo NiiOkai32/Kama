@@ -2,7 +2,7 @@
 
 Two signed-in players share a private room, the same Truth/Desire prompts, individual readiness, a timer, turn changes and round completion. A host with an active membership can invite one partner without charging that partner. Local game modes remain free.
 
-The proposed price is **US$1.99 per month**. **Purchases are disabled**: there is no merchant account, payment processor integration, subscription creation, renewal or cancellation flow yet. The checkout endpoint returns 503 and cannot grant access. No production membership has been issued.
+The base price is **US$2.99 per month**, with a current daily-rate GHS equivalent. [Pricing details](PRICING.md). **Purchases are disabled**: Paystack is in test mode with live approval pending; the payment processor integration, subscription creation, renewal and cancellation flow are not active yet. The checkout endpoint returns 503 and cannot grant access. No production membership has been issued.
 
 ## Deployment status
 
@@ -38,7 +38,7 @@ Obtain merchant approval for Kama's actual content and business before selecting
 - [Subscription payment channels](https://paystack.com/docs/payments/subscriptions/)
 - [Restricted businesses](https://support.paystack.com/en/articles/2127042)
 
-After approval, implement server-created checkout, verified signed webhooks, server-side amount/currency/product checks, idempotent payment records, refunds/revocations, renewal reminders and cancellation. For mobile money, show the actual supported local-currency quote before authorization. The UI's US$1.99 is a proposed price; this branch does not charge or convert it. Only verified billing events should extend access. Add abuse/rate limits and retention cleanup before public paid launch.
+After approval, implement server-created checkout, verified signed webhooks, server-side amount/currency/product checks, idempotent payment records, refunds/revocations, renewal reminders and cancellation. For mobile money, show the actual supported local-currency quote before authorization. The base price is US$2.99/month. The new `duet-price` endpoint converts it to GHS using the latest published daily ExchangeRate-API rate; the UI refreshes while visible and shows the rate timestamp. It is a display quote, not a payment authorization. Future checkout must obtain and persist a fresh server-side GHS amount in pesewas, present it for confirmation, and verify that same amount before granting access. Do not use a fixed-GHS Paystack plan for this USD-indexed price. Only verified billing events should extend access. Add abuse/rate limits and retention cleanup before public paid launch.
 
 ## Verification
 

@@ -14,7 +14,7 @@ test('requests require a validated user session',async()=>{
 test('actor, entitlement and price fields in request JSON are never trusted',async()=>{
  const {handle,calls}=fixture();const response=await handle(request({action:'membership',user_id:GUEST,premium:true,price:0}));assert.equal(response.status,200);
  const rpc=JSON.parse(calls[1].options.body);assert.equal(rpc.p_actor,HOST);assert.equal(rpc.p_payload.premium,undefined);assert.equal(rpc.p_payload.price,undefined);
- const data=await response.json();assert.equal(data.premium,false);assert.equal(data.offer.amount_minor,199);assert.equal(data.offer.checkout_enabled,false);
+ const data=await response.json();assert.equal(data.premium,false);assert.equal(data.offer.amount_minor,299);assert.equal(data.offer.checkout_enabled,false);
  assert.equal(calls[0].options.headers.apikey,'sb_publishable_fixture');assert.equal(calls[1].options.headers.apikey,'sb_secret_fixture');assert.equal(calls[1].options.headers.Authorization,undefined);
  assert(!JSON.stringify(data).includes('sb_secret'));
 });

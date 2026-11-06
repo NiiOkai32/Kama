@@ -12,7 +12,7 @@ class Server:
  def call(self,user,body):
   self.calls.append((user,body));a=body['action']
   def fail(message,status=403):return {'error':message,'status':status}
-  if a=='membership':return {'premium':user==HOST,'offer':{'amount_minor':199,'currency':'USD','checkout_enabled':False}}
+  if a=='membership':return {'premium':user==HOST,'offer':{'amount_minor':299,'currency':'USD','checkout_enabled':False}}
   if a=='resume':return {'room':self.room.copy() if self.room and self.room['status']=='open' and user in [self.room['host_id'],self.room['guest_id']] else None,'server_now':now()}
   if a=='create':
    if user!=HOST:return fail('A Duet membership is required to host.')
@@ -63,7 +63,7 @@ with sync_playwright() as p:
    for page in pages:page.evaluate("r=>(window.duetChannels||[]).forEach(c=>c.callback({new:r}))",server.room.copy())
  host=make(HOST);guest=make(GUEST)
  host.click('.md[data-m="duet"]');guest.click('.md[data-m="duet"]')
- expect(guest.locator('#duetOffer')).to_be_visible();expect(guest.locator('#duetBuy')).to_be_disabled();expect(guest.locator('#duetCreate')).to_be_hidden();expect(guest.locator('#duetOffer')).to_contain_text('$1.99');ok('The proposed US$1.99 paywall is visible, checkout is disabled, and free guests retain Join')
+ expect(guest.locator('#duetOffer')).to_be_visible();expect(guest.locator('#duetBuy')).to_be_disabled();expect(guest.locator('#duetCreate')).to_be_hidden();expect(guest.locator('#duetOffer')).to_contain_text('$2.99');ok('The proposed US$2.99 paywall is visible, checkout is disabled, and free guests retain Join')
  host.fill('#duetName','Alex');host.click('#duetCreate');expect(host.locator('#duetRoom')).to_be_visible();expect(host.locator('#duetDraw')).to_be_disabled();link=host.locator('#duetInviteLink').input_value();assert '#duet=' in link
  guest.fill('#duetName','Riley');guest.fill('#duetCode',link);guest.click('#duetJoin');sync();expect(host.locator('#duetDraw')).to_be_enabled();expect(guest.locator('#duetDraw')).to_be_enabled();ok('A paid host creates a private room and one unpaid partner joins by invitation')
  other=make(OTHER);other.click('.md[data-m="duet"]');other.fill('#duetName','Third');other.fill('#duetCode',link);other.click('#duetJoin');expect(other.locator('#duetStatus')).to_contain_text('two players');expect(other.locator('#duetRoom')).to_be_hidden();ok('A third account cannot join or read the two-player room')

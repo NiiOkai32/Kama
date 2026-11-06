@@ -5,3 +5,5 @@
 @media(max-width:380px){.mode-nav .md>.icon{display:none}.mode-nav .md{font-size:11px}.duet-title-row h2{font-size:24px}.duet-title-row .eyebrow{font-size:7px;letter-spacing:.5px}}
 
 .duet-deck{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-top:14px}.duet-deck label{margin:0}.duet-deck select{min-height:44px;min-width:140px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font:14px var(--sans);padding:8px 12px}
+
+.duet-offer .duet-ghs{font-size:17px;color:var(--gold);margin:14px 0 6px;overflow-wrap:anywhere}.duet-offer .duet-rate-note{font-size:11px;line-height:1.7;margin:0 0 5px}.duet-rate-source{font-size:10px;color:var(--muted);text-underline-offset:3px;display:inline-flex;align-items:center;min-height:32px}
