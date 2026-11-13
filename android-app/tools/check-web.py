@@ -20,9 +20,12 @@ with sync_playwright() as p:
  page.click('.md[data-m="cards"]');page.locator('#sessionPanel').evaluate('e=>e.open=true');page.click('[data-open="settingsDialog"]');page.fill('#cu','Share one good memory.');page.click('#cadd');page.click('#exportDeck');data=json.loads(page.evaluate('window.nativeDeck'));assert data['version']==1 and any(card['t']=='Share one good memory.' for card in data['cards'])
  page.set_input_files('#deckFile',{'name':'backup.json','mimeType':'application/json','buffer':json.dumps({'version':1,'cards':[{'l':1,'n':'Native import','t':'Tell a joke.','s':60}]}).encode()});page.click('#importConfirm');assert page.evaluate("custom.some(c=>c.n==='Native import')")
  page.locator('#settingsDialog [data-close]').last.click();page.click('#draw');page.click('#fav');page.click('[data-open="favoritesDialog"]');page.click('#fcopy');assert page.evaluate('window.nativeCopied');page.keyboard.press('Escape')
+ page.click('#musicOpen');expect(page.locator('#musicDialog')).to_be_visible();assert page.locator('#musicLaunch').get_attribute('target') is None
+ page.evaluate("document.getElementById('musicLaunch').addEventListener('click',e=>{e.preventDefault();window.nativeMusicLink=e.currentTarget.href})")
+ page.click('#musicLaunch');assert page.evaluate('window.nativeMusicLink').startswith('https://open.spotify.com/playlist/');assert page.evaluate('window.kamaMusicQuiet') is True;page.locator('#musicDialog > .main').click()
  for width,height in [(320,568),(390,844),(844,390),(768,1024)]:
   page.set_viewport_size({'width':width,'height':height});assert page.evaluate('document.documentElement.scrollWidth<=innerWidth');
  page.click('#pausePlay');expect(page.locator('#pauseDialog')).to_be_visible();page.click('#pauseHide');page.wait_for_url('**/quiet.html');assert page.title()=='Take a moment'
  assert not calls,calls;assert not errors,errors
- print('PASS bundled APK web assets: offline play, all local modes, gated Duet, forfeits, native export/clipboard, JSON import, responsive layouts and privacy controls. No backend requests in local mode.')
+ print('PASS bundled APK web assets: offline play, all local modes, gated Duet, forfeits, native export/clipboard, JSON import, responsive layouts, music launch/quiet mode and privacy controls. No backend requests in local mode.')
  b.close()

@@ -121,3 +121,7 @@ The Supabase client is self-hosted at version 2.118.0. The build writes CSP and 
 ## USD and GHS pricing
 
 Duet is US$2.99/month, with a GHS preview derived from the latest published daily ExchangeRate-API rate. The display refreshes while the offer is visible; no stale offline cedi estimate is shown. Checkout remains disabled. [Rate source, freshness and checkout requirements](docs/PRICING.md).
+
+## Music while playing
+
+Choose **Music**, select a starter or save a Spotify/Apple Music playlist share link, then **Open**. Press Play in the music app or tab and return to Kama; the whole playlist can continue independently of card changes. Music playback and account requirements stay with the provider. Kama mutes ambient sound and timer tones by default after opening a playlist, while keeping vibration alerts. No streaming SDK, account linking, previews or remote embeds are included. [Music setup and limits](docs/MUSIC.md).

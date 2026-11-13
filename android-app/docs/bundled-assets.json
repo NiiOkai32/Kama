@@ -1,5 +1,5 @@
 {
-  "sourceCommit": "22d39861d300d2171ae9cb1ed2a6844888cce600",
+  "sourceCommit": "c77fa3ce29110909fb76dd41fcc0466b876e8ea5",
   "files": [
     {
       "path": "account-pages.js",
@@ -67,15 +67,27 @@
     },
     {
       "path": "game.html",
-      "sha256": "183688ce2496956358c6cddbadf1371085cea0f5cbb9ecb380439747e0b529d3"
+      "sha256": "997b5eca4b08755d9cb6dcbe31c5a9241b2afb915458bd570d475e1c5181b89a"
     },
     {
       "path": "game.js",
-      "sha256": "40bd5b4501e1e845c6fb05c5d39c15a0080dbe8b315c58b24bd6d886d1891f1a"
+      "sha256": "e220286eeae0914e4c440af26fa2e74f603bd190966c664e30f99e78726fd6d6"
     },
     {
       "path": "index.html",
       "sha256": "16a9024169cbf43b1c9c4c8bebaf71c954d7a9fc98182e76070b6dcc84e3be95"
+    },
+    {
+      "path": "music-links.js",
+      "sha256": "345fab9cebbd34cdbbb3a25439ce8f6bc991a354b925b38bfb3021bc7def297b"
+    },
+    {
+      "path": "music.css",
+      "sha256": "431de83a876b05ce599db58c49c4cfbe927ea007875d02de473049f1170074df"
+    },
+    {
+      "path": "music.js",
+      "sha256": "7873e7375553a09c69ae663f2a3aa73aadb3ed5d6813ad2845daa75d9a584eb4"
     },
     {
       "path": "native-shell.js",
@@ -91,7 +103,7 @@
     },
     {
       "path": "privacy.html",
-      "sha256": "20353b56ac13cf44841f24f9acbf91689a2f420f7fec80577e5de07e0d536977"
+      "sha256": "a0017daa6a270f37badfa0c9892b03be18432ffe19aa686d7a8777a9d907bd24"
     },
     {
       "path": "privacy.js",

@@ -1,11 +1,11 @@
 {
-  "version": "1.0.1",
+  "version": "1.0.2",
   "applicationId": "io.github.niiokai32.kama",
   "minSdk": 26,
   "targetSdk": 35,
-  "apkBytes": 156433,
-  "apkSha256": "3b2748f3e5950df91dfbf60ada6418b2ada6da1e34ad423a48393d37b2132bb4",
-  "verifiedBundledFiles": 34,
+  "apkBytes": 160939,
+  "apkSha256": "a050d540669b163c4173f449da32f8abf50a60123f49f3637491d0212a38db86",
+  "verifiedBundledFiles": 37,
   "releaseBuild": "passed",
   "androidLint": "passed, zero errors, three warnings",
   "apkSignature": "v2 verified",
@@ -14,12 +14,17 @@
   "physicalOrEmulatorTests": "not available",
   "liveAuthRealtimeTests": "not performed",
   "paymentsEnabled": false,
-  "versionCode": 2,
+  "versionCode": 3,
   "usdBaseAmountMinor": 299,
   "priceCurrencies": [
     "USD",
     "GHS"
   ],
   "rateSourceRefresh": "daily",
-  "pricingChecks": "8 handler tests and 5 browser checks passed; live upstream not verified"
+  "pricingChecks": "8 handler tests and 5 browser checks passed; live upstream not verified",
+  "musicMode": "external provider app/tab handoff",
+  "musicAccountLinking": false,
+  "musicEmbeddedStreaming": false,
+  "musicChecks": "6 URL tests, 4 browser-context flows, quiet-game controls and packaged native-shaped smoke passed",
+  "liveMusicPlaybackTest": "not performed; no personal provider account/device used"
 }
