@@ -119,3 +119,7 @@ Choose **Couldn’t complete** on a card, then **Playful**, **Drink** (one sip o
 The current build adds a recurring 18+ self-declaration, first-visit instructions, sticky Pause / Stop and Hide controls, device-data clearing, password recovery, password-confirmed account deletion, per-player local theme boundaries and validated JSON custom-deck backups. Account-linked gameplay analytics are disabled. Local storage is shared across accounts using the same browser profile. See [the privacy notice](privacy.html) and [the suggestions review](docs/SECURITY-REVIEW.md) for limits and remaining provider settings.
 
 The Supabase client is self-hosted at version 2.118.0. The build writes CSP and no-referrer metadata into root pages and dist, and Netlify response headers add frame, MIME and permission protections. Server credentials remain in Edge Function environment variables. The publishable browser key is intentionally public.
+
+## Music while playing
+
+Choose **Music**, select a starter or save a Spotify/Apple Music playlist share link, then **Open**. Press Play in the music app or tab and return to Kama; the whole playlist can continue independently of card changes. Music playback and account requirements stay with the provider. Kama mutes ambient sound and timer tones by default after opening a playlist, while keeping vibration alerts. No streaming SDK, account linking, previews or remote embeds are included. [Music setup and limits](docs/MUSIC.md).

@@ -142,6 +142,7 @@ const HOW={
 
 // ---- timers: chime, auto-start, dice ----
 function chime(){
+  if(window.kamaMusicQuiet){try{navigator.vibrate&&navigator.vibrate([200,100,200])}catch{}return;}
   try{const C=new (window.AudioContext||window.webkitAudioContext)();
     [0,.35].forEach((t,i)=>{const o=C.createOscillator(),g=C.createGain();o.frequency.value=i?660:523;o.connect(g);g.connect(C.destination);
       g.gain.setValueAtTime(.15,C.currentTime+t);g.gain.exponentialRampToValueAtTime(.001,C.currentTime+t+.5);o.start(C.currentTime+t);o.stop(C.currentTime+t+.55)});
@@ -540,6 +541,7 @@ $('fcopy').onclick=async()=>{const t=favs.map(f=>'• '+f.n+': '+f.t).join('\n')
 $('night').onclick=()=>{const r=document.documentElement;const on=r.dataset.theme!=='night';r.dataset.theme=on?'night':'dark';$('night').setAttribute('aria-pressed',String(on));sv('kama_theme',r.dataset.theme)};
 let ac=null;
 $('amb').onclick=()=>{
+  if(window.kamaMusicQuiet){showToast('Game sounds are muted. Change this in Music.');return}
   if(ac){ac.close();ac=null;$('amb').setAttribute('aria-pressed','false');$('amb').title='Ambient sound';return}
   try{ac=new (window.AudioContext||window.webkitAudioContext)();const g=ac.createGain();g.gain.value=.05;const f=ac.createBiquadFilter();f.type='lowpass';f.frequency.value=500;f.connect(g);g.connect(ac.destination);
     [110,164.8,220,277.2].forEach((fr,i)=>{const o=ac.createOscillator();o.frequency.value=fr;const l=ac.createOscillator(),lg=ac.createGain();l.frequency.value=.05+i*.03;lg.gain.value=3;l.connect(lg);lg.connect(o.frequency);o.connect(f);o.start();l.start()});

@@ -1,0 +1,13 @@
+.music-intro{font-size:13px;line-height:1.75;color:var(--muted);margin-bottom:20px}
+#musicChoice{width:100%;margin-bottom:14px}
+#musicLaunch{display:flex;width:100%;margin-bottom:14px}
+.music-library-tools{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.music-library-tools button{min-height:44px;font-size:12px}
+#musicForm{border-top:1px solid var(--line);padding-top:18px;margin-top:18px}
+#musicForm .ghost{width:100%;margin-top:12px;min-height:44px}
+#musicForm input{margin-bottom:14px}
+.music-hint{font-size:12px;line-height:1.7;color:var(--muted)}
+#musicStatus{font-size:12px;line-height:1.7;overflow-wrap:anywhere;margin:18px 0;color:var(--gold)}
+#musicDialog>.main{margin-top:8px}
+#musicDialog .check{font-size:13px;letter-spacing:0}
+@media(max-width:600px){.safety-bar>#musicOpen{flex:1}.music-library-tools{flex-wrap:wrap}.music-library-tools button{flex:1}}
