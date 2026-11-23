@@ -14,6 +14,7 @@ test('the public product quote cannot accept a caller-supplied price or currency
   assert.equal((await handler(request('?amount_minor=1&currency=USD'))).status,400);assert.equal(calls.length,0);
   const response=await handler(request());const value=await response.json();assert.equal(response.status,200);assert.equal(value.offer.amount_minor,299);assert.equal(value.local_price.amount_minor,3259);assert.equal(value.local_price.currency,'GHS');assert.equal(value.checkout_enabled,false);
   assert.equal(calls[0].url,FX_SOURCE);assert.deepEqual(calls[0].options.headers,{Accept:'application/json'});
+  assert.equal(calls[0].options.redirect,'error');
   assert.equal(value.purpose,'price_display_only');assert.equal(value.rates,undefined);assert.equal(value.exchange_rate,undefined);assert.equal(value.user_id,undefined);
   assert.equal(response.headers.get('Cache-Control'),'no-store');assert.equal(Date.parse(value.display_valid_until)-START,15*60*1000);
 });

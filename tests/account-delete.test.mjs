@@ -34,6 +34,7 @@ test('reauthentication must match the original verified caller',async()=>{
 test('forged target IDs and emails are ignored; only the authenticated caller is deleted',async()=>{
   const f=fixture();const result=await f.handle(request({confirmation:'DELETE',password:'fixture-password',user_id:'attacker-target',email:'other@example.invalid'}));
   assert.equal(result.status,200);assert.deepEqual(await result.json(),{deleted:true});
+  assert(f.calls.every(call=>call.options.redirect==='error'));
   assert.equal(JSON.parse(f.calls[1].options.body).email,'fixture@example.invalid');
   assert.match(f.calls[2].url,/logout\?scope=global$/);assert.match(f.calls[3].url,new RegExp(ID));
   assert.deepEqual(JSON.parse(f.calls[3].options.body),{status:'closed',guest_id:null,guest_name:null,guest_seen_at:null,card:null,card_id:null,host_reveal:null,guest_reveal:null,timer_ends_at:null});

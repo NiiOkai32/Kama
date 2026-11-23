@@ -1,50 +1,103 @@
-// Existing account flows, deferred until the document and auth client are ready.
-if(document.getElementById('intro')){
+// Account forms share the configured email callback and use account-neutral messages.
+(() => {
+  const byId = id => document.getElementById(id);
+  const client = window.kamaSupabase;
+  const auth = client?.auth;
+  const unavailable = window.kamaSupabaseError || 'Account service is unavailable. Try again later.';
 
-(async()=>{try{if(!window.kamaSupabase){document.getElementById('setupMessage').textContent=window.kamaSupabaseError||'Account service is not configured yet.';document.getElementById('setupMessage').classList.remove('hidden');return}const {data}=await window.kamaSupabase.auth.getUser();if(data.user){document.getElementById('intro').textContent='Your next evening starts here.';document.querySelector('.actions').classList.add('hidden');document.getElementById('continue').classList.remove('hidden')}}catch(error){document.getElementById('setupMessage').textContent='Connection interrupted. Try signing in again.';document.getElementById('setupMessage').classList.remove('hidden')}})();
+  if (byId('intro')) {
+    const setup = byId('setupMessage');
+    function showSetup(message) {
+      setup.textContent = message;
+      setup.classList.remove('hidden');
+    }
+    if (!auth) {
+      showSetup(unavailable);
+    } else {
+      auth.getUser().then(({ data }) => {
+        if (!data?.user) return;
+        byId('intro').textContent = 'Your next evening starts here.';
+        document.querySelector('.actions').classList.add('hidden');
+        byId('continue').classList.remove('hidden');
+      }).catch(() => showSetup('Connection interrupted. Try signing in again.'));
+    }
+  }
 
-}
-if(document.getElementById('signinForm')){
+  function bind(formId, statusId, submitAction) {
+    const form = byId(formId);
+    if (!form) return;
+    const status = byId(statusId);
+    const submit = form.querySelector('button[type="submit"]');
+    form.addEventListener('submit', async event => {
+      event.preventDefault();
+      if (submit.disabled) return;
+      if (!auth) {
+        status.textContent = unavailable;
+        return;
+      }
+      submit.disabled = true;
+      status.textContent = '';
+      try {
+        await submitAction(status);
+      } catch {
+        status.textContent = 'Account service is temporarily unavailable. Try again later.';
+      } finally {
+        submit.disabled = false;
+      }
+    });
+  }
 
-document.getElementById('signinForm').addEventListener('submit',async event=>{
-  event.preventDefault();const status=document.getElementById('status');
-  if(!window.kamaSupabase){status.textContent=window.kamaSupabaseError||'Account service is unavailable.';return}
-  status.textContent='Signing in…';
-  const submit=event.target.querySelector('button[type=submit]');submit.disabled=true;
-  try{
-    const {data,error}=await window.kamaSupabase.auth.signInWithPassword({email:document.getElementById('email').value.trim(),password:document.getElementById('password').value});
-    if(error)throw error;
-    if(data.user&&data.user.user_metadata?.usage_tracking===true)await window.kamaTrack('session_start').catch(()=>{});
-    document.getElementById('formPanel').classList.add('hidden');document.getElementById('success').classList.remove('hidden');
-  }catch(error){status.textContent=error.message||'Could not sign in.'}finally{submit.disabled=false}
-});
+  function credentials() {
+    return { email: byId('email').value.trim(), password: byId('password').value };
+  }
 
-}
-if(document.getElementById('signupForm')){
+  function showSuccess() {
+    byId('formPanel').classList.add('hidden');
+    byId('success').classList.remove('hidden');
+    byId('successTitle').focus();
+  }
 
-document.getElementById('signupForm').addEventListener('submit',async event=>{
-  event.preventDefault();const status=document.getElementById('status');
-  if(!window.kamaSupabase){status.textContent=window.kamaSupabaseError||'Account service is unavailable.';return}
-  status.textContent='Creating account…';
-  const submit=event.target.querySelector('button[type=submit]');submit.disabled=true;
-  try{
-    const {data,error}=await window.kamaSupabase.auth.signUp({email:document.getElementById('email').value.trim(),password:document.getElementById('password').value,options:{emailRedirectTo:new URL('game.html',window.location.href).href,data:{usage_tracking:false}}});
-    if(error)throw error;
-    if(data.session){if(document.getElementById('tracking').checked)await window.kamaTrack('session_start').catch(()=>{});document.getElementById('successTitle').textContent='Account created';document.getElementById('successText').textContent='Your evening is waiting.'}
-    else{document.getElementById('successTitle').textContent='Check your email';document.getElementById('successText').textContent='Tap the confirmation link in your email, then sign in.';document.getElementById('continue').href='signin.html';document.getElementById('continue').textContent='Sign in'}
-    document.getElementById('formPanel').classList.add('hidden');document.getElementById('success').classList.remove('hidden');
-  }catch(error){status.textContent=error.message||'Could not create account.'}finally{submit.disabled=false}
-});
+  function providerUnavailable(error) {
+    return error && (!Number.isInteger(error.status) || error.status < 400 || error.status >= 500);
+  }
 
-}
-if(document.getElementById('resetForm')){
-  document.getElementById('resetForm').onsubmit=async event=>{
-    event.preventDefault();const status=document.getElementById('resetStatus'),button=document.getElementById('resetSend');button.disabled=true;
-    try{
-      if(!window.kamaSupabase)throw new Error('Account service is unavailable. Try again later.');
-      const {error}=await window.kamaSupabase.auth.resetPasswordForEmail(document.getElementById('resetEmail').value.trim(),{redirectTo:new URL('game.html',location.href).href});
-      if(error)throw error;
-      status.textContent='If an account exists, a reset link will arrive by email. Check your spam folder too.';
-    }catch(error){status.textContent=error.status===429?'Please wait before requesting another link.':'Could not request a reset link. Try again later.'}finally{button.disabled=false}
-  };
-}
+  bind('signinForm', 'status', async status => {
+    const { error } = await auth.signInWithPassword(credentials());
+    if (providerUnavailable(error)) throw error;
+    if (error) {
+      status.textContent = 'Could not sign in. Check your email and password or request a password reset.';
+      return;
+    }
+    showSuccess();
+  });
+
+  bind('signupForm', 'status', async status => {
+    const { data, error } = await auth.signUp({
+      ...credentials(),
+      options: { emailRedirectTo: window.kamaAuthRedirectUrl }
+    });
+    if (providerUnavailable(error)) throw error;
+    if (error?.code === 'weak_password') {
+      status.textContent = 'Choose a stronger password. Use a unique password or passphrase.';
+      return;
+    }
+    if (!error && data?.session) {
+      byId('successTitle').textContent = 'Account created';
+      byId('successText').textContent = 'Your evening is waiting.';
+    } else {
+      byId('successTitle').textContent = 'Check your email';
+      byId('successText').textContent = 'If we can create an account for this address, you’ll receive a confirmation link. If you already have an account, sign in or reset your password.';
+      byId('continue').href = 'signin.html';
+      byId('continue').textContent = 'Sign in';
+    }
+    showSuccess();
+  });
+
+  bind('resetForm', 'resetStatus', async status => {
+    const { error } = await auth.resetPasswordForEmail(byId('resetEmail').value.trim(), {
+      redirectTo: window.kamaAuthRedirectUrl
+    });
+    if (providerUnavailable(error)) throw error;
+    status.textContent = 'If this address can receive a reset link, we’ll send one. Check your spam folder and wait a few minutes before trying again.';
+  });
+})();

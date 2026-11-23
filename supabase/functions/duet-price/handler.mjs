@@ -13,7 +13,7 @@ export function createPriceHandler({env=()=>'',fetcher=fetch,now=Date.now}) {
     if(time<retryAt)throw new Error('Rate service temporarily unavailable.');
     inflight=(async()=>{
       try{
-        const response=await fetcher(FX_SOURCE,{headers:{Accept:'application/json'},signal:AbortSignal.timeout(6000)});
+        const response=await fetcher(FX_SOURCE,{headers:{Accept:'application/json'},redirect:'error',signal:AbortSignal.timeout(6000)});
         if(!response.ok||Number(response.headers.get('Content-Length')||0)>200000)throw new Error('Rate provider unavailable.');
         const raw=await response.text();if(raw.length>200000)throw new Error('Invalid rate response.');
         cached=validateRate(JSON.parse(raw),now());refreshAt=Math.min(now()+60*60*1000,cached.next);retryAt=0;

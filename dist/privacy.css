@@ -27,3 +27,9 @@ select:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
 .safety-bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding:8px 0;border-bottom:1px solid var(--line)}
 .mode-nav{top:72px}.card{scroll-margin-top:144px}
 @media(min-width:980px){.session-sidebar{top:80px;max-height:calc(100dvh - 100px)}}
+
+.policy-links{display:flex;flex-wrap:wrap;align-items:center;gap:0 16px}
+.policy-links a{display:inline-flex;align-items:center;min-height:44px;color:var(--ink);font-size:12px;letter-spacing:0;text-underline-offset:3px}
+.privacy-page a,.field-hint a,.check a{color:var(--accent);text-underline-offset:3px}
+.privacy-page h1:focus,.auth-card h1:focus{outline:none}
+@media(max-width:560px){.app-footer:has(.policy-links){flex-wrap:wrap;gap:4px 16px}}

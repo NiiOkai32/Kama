@@ -168,6 +168,8 @@ public final class MainActivity extends Activity {
     }
     private static Map<String, String> headers() {
         Map<String, String> h = new HashMap<>();
+        h.put("Content-Security-Policy", "frame-ancestors 'none'; object-src 'none'; base-uri 'self'");
+        h.put("X-Frame-Options", "DENY");
         h.put("Cache-Control", "no-store"); h.put("Referrer-Policy", "no-referrer"); h.put("X-Content-Type-Options", "nosniff");
         return h;
     }

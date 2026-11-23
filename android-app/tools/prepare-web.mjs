@@ -9,10 +9,10 @@ if(!/^[a-f0-9]{40}$/.test(sourceCommit||''))throw new Error('Pass the web source
 if(!supplied)throw new Error('Pass the latest Kama web dist directory.');
 const source=path.resolve(supplied),destination=path.join(root,'android/app/src/main/assets/web');
 for(const name of ['game.html','game.js','questions.js','duet.js','privacy.js','supabase-config.js'])if(!existsSync(path.join(source,name)))throw new Error('Missing complete web build: '+name);
-rmSync(destination,{recursive:true,force:true});mkdirSync(destination,{recursive:true});cpSync(source,destination,{recursive:true});
+rmSync(destination,{recursive:true,force:true});mkdirSync(destination,{recursive:true});cpSync(source,destination,{recursive:true,filter:file=>file!==path.join(source,'_headers')});
 cpSync(path.join(root,'tools/native-shell.js'),path.join(destination,'native-shell.js'));
 cpSync(path.join(root,'tools/native.css'),path.join(destination,'native.css'));
-for(const name of readdirSync(destination).filter(n=>n.endsWith('.html')&&n!=='quiet.html'&&n!=='privacy.html')){
+for(const name of readdirSync(destination).filter(n=>n.endsWith('.html')&&n!=='quiet.html'&&n!=='privacy.html'&&n!=='terms.html')){
   const file=path.join(destination,name);let html=readFileSync(file,'utf8');
   html=html.replace('<script src="assets/vendor/supabase.js"','<script src="native-shell.js"></script><script src="assets/vendor/supabase.js"');
   html=html.replace('</head>','<link rel="stylesheet" href="native.css"></head>');

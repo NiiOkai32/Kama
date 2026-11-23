@@ -17,6 +17,7 @@ test('actor, entitlement and price fields in request JSON are never trusted',asy
  const data=await response.json();assert.equal(data.premium,false);assert.equal(data.offer.amount_minor,299);assert.equal(data.offer.checkout_enabled,false);
  assert.equal(calls[0].options.headers.apikey,'sb_publishable_fixture');assert.equal(calls[1].options.headers.apikey,'sb_secret_fixture');assert.equal(calls[1].options.headers.Authorization,undefined);
  assert(!JSON.stringify(data).includes('sb_secret'));
+ assert(calls.every(call=>call.options.redirect==='error'));
 });
 test('room creation generates a 128-bit token and only stores its hash',async()=>{
  const {handle,calls}=fixture({rpcResult:{room:{id:ROOM,host_id:HOST,guest_id:null}}});const response=await handle(request({action:'create',display_name:'Alex',invite_hash:'attacker-controlled'}));

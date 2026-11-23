@@ -66,7 +66,7 @@ export function createDuetHandler({ env, fetcher=fetch, cryptoImpl=globalThis.cr
       const publicKey=namedKey(env,'SUPABASE_PUBLISHABLE_KEYS','SUPABASE_ANON_KEY');
       const serverKey=namedKey(env,'SUPABASE_SECRET_KEYS','SUPABASE_SERVICE_ROLE_KEY');
       if(!/^https:\/\/[a-z0-9]{20}\.supabase\.co$/.test(url)||!publicKey||!serverKey)throw new DuetError('Duet setup is still being finished.',503);
-      const userResponse=await fetcher(url+'/auth/v1/user',{headers:{apikey:publicKey,Authorization:authorization},signal:AbortSignal.timeout(10000)});
+      const userResponse=await fetcher(url+'/auth/v1/user',{headers:{apikey:publicKey,Authorization:authorization},redirect:'error',signal:AbortSignal.timeout(10000)});
       if(!userResponse.ok)throw new DuetError('Sign in again to use Duet.',401);
       const user=await userResponse.json();if(!UUID.test(user.id||''))throw new DuetError('Sign in again to use Duet.',401);
       if(command.action==='checkout')throw new DuetError('Membership purchases are not available yet. No payment has been taken.',503);
@@ -78,7 +78,7 @@ export function createDuetHandler({ env, fetcher=fetch, cryptoImpl=globalThis.cr
       }
       const rpcHeaders={apikey:serverKey,'Content-Type':'application/json'};
       if(!serverKey.startsWith('sb_secret_'))rpcHeaders.Authorization='Bearer '+serverKey;
-      const response=await fetcher(url+'/rest/v1/rpc/duet_command',{method:'POST',headers:rpcHeaders,body:JSON.stringify({p_actor:user.id,p_action:command.action,p_room:command.room,p_payload:command.payload}),signal:AbortSignal.timeout(10000)});
+      const response=await fetcher(url+'/rest/v1/rpc/duet_command',{method:'POST',headers:rpcHeaders,body:JSON.stringify({p_actor:user.id,p_action:command.action,p_room:command.room,p_payload:command.payload}),redirect:'error',signal:AbortSignal.timeout(10000)});
       const data=await response.json();
       if(!response.ok){
         const status={'42501':403,'23505':409,'40001':409,'22023':400}[data.code];

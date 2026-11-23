@@ -51,3 +51,30 @@ Eight account-deletion handler tests cover missing sessions, password failure, m
 The database verifies anonymous/authenticated event INSERT is denied and its unsafe metadata policy is gone. No live user was created, emailed, charged or deleted by the tests. Live password email delivery and live destructive deletion were not exercised: the execution workspace blocks this project's API hostname. Handler/provider calls and browser account actions were tested using fixtures. Actual account recovery/deletion on a disposable account remains a launch check. Physical devices and Safari were not tested.
 
 Pricing update, 6 November 2026: the monthly USD base is now US$2.99, with a server-derived daily-rate GHS preview. See [pricing controls and remaining checkout work](PRICING.md).
+
+## Video checklist review · 23 November 2026
+
+### Policies and accessibility
+
+| Checklist area | Kama |
+| --- | --- |
+| Privacy, terms, refunds and pricing | The policy links are available from the welcome, account and game screens. The terms describe the current free app and disabled Duet checkout. US$2.99 is the offer price, and the GHS preview cannot authorize a charge. |
+| Cookies, consent and collection | Functional local and session storage are disclosed and can be cleared. There are no optional tracking cookies to request consent for. Signup requires terms agreement in the form, with a separate privacy link. The 18+ declaration remains local. Signup’s account fields are email and password. |
+| Third-party code, fonts and images | Supabase JS is pinned and served locally with its MIT license. Kama uses system fonts and ships its local SVG artwork. User images stay on-device. Spotify and Apple Music open only on an explicit action. The public FX endpoint uses a fixed source. Asset ownership or permission for anything added later remains the operator’s responsibility. |
+| Reviews, product claims and choice | No review or testimonial component was found. The game labels device-only play separately from Duet. No checkout or marketing subscription is enabled. Pause, skip and clear-device controls remain available. |
+| Keyboard, contrast and image descriptions | Account pages have skip links and move focus to the result heading after successful submission. Game shortcuts can be turned off without disabling Tab navigation or Escape to hide. Decorative card emblems have empty alt text. User card images and game illustrations have accessible labels. Automated WCAG checks covered the main pages at mobile and desktop widths. |
+| Contact, children, email and deletion | The project’s public issue tracker is for general support. A private contact and verified operator details are still needed for sensitive requests from people who cannot sign in. Account deletion remains available in Game settings. Kama is adults-only and collects no birth date. The app has no marketing mailing list or promotional mail to unsubscribe from. |
+
+### App security
+
+| Checklist area | Kama |
+| --- | --- |
+| Framework headers, Git metadata and source maps | Kama is a static site without Next.js. The web build publishes a file allowlist and excludes source maps, Git metadata and backend files. The local server serves files from that build and disables directory listings. |
+| Frame protection | Netlify’s built `_headers` works for manual and Git-backed deployment. Local and Android responses also deny framing. The account and game pages hide and leave for the neutral page when framed on GitHub Pages. Pages does not provide the equivalent HTTP header. |
+| Storage, database and races | No Supabase Storage calls or user-image uploads ship in the app. The SQL protects usage events, memberships and rooms with grants and RLS. Duet writes are restricted to a server RPC, with row locks and revision checks. The latest security-advisor result reported only the Auth password warning below. |
+| Browser-controlled price and server-side fetches | The product price is fixed server-side, and checkout remains disabled. Edge handlers use configured service URLs or a fixed FX source and reject upstream redirects. Playlists go directly to the selected provider rather than through a server proxy. |
+| Credential stuffing, JWTs, account claiming and SMS | Supabase handles passwords and signs tokens. Account deletion and Duet verify callers with Auth before privileged operations. The hosted project reports email confirmation enabled and email as the only enabled sign-in provider. Leaked-password protection is disabled. Provider-side rate limits, the signing configuration and breached-password protection still need verification or configuration by the operator. |
+| Recovery, redirects and account enumeration | Signup and password recovery use an exact configured HTTPS callback. The game opens recovery after the Supabase SDK reports a recovery session. Account forms use neutral responses for failed sign-in and email requests. The provider’s direct Auth API still has its own settings and responses. Production Auth must allowlist only the intended callback URLs. |
+| Prompt injection and subdomains | The app has no model integration. No custom Pages domain is configured in this checkout. DNS ownership and removal of stale records are hosting checks if a custom domain is added. |
+
+This review changes the source, web build and web ZIP. The signed APK and its recorded asset snapshot are release artifacts. Rebundle and sign a new version to include the changes on installed devices. No provider settings were changed.
