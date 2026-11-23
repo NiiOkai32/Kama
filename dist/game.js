@@ -624,6 +624,7 @@ const addCustom=$('cadd').onclick;
 $('cadd').onclick=()=>{if(!$('cu').value.trim()){showToast('Write your card first.');return}addCustom();showToast('Added to your deck.')};
 $('cu').addEventListener('keydown',e=>{if(e.key==='Enter')$('cadd').click()});
 (async()=>{
+ if(window.top!==window)return;
  try{
   const client=window.kamaSupabase;
   if(!client){window.location.replace('index.html?setup=1');return}
@@ -644,8 +645,11 @@ window.addEventListener('pagehide',()=>{
  if(ac)ac.suspend().catch(()=>{});
 });
 function clickGameAction(id){const button=$(id);if(button&&!button.disabled&&button.getClientRects().length){button.click();return true}return false}
+const gameShortcuts = $('gameShortcuts');
+gameShortcuts.checked = ld('kama_game_shortcuts', true) !== 'off';
+gameShortcuts.onchange = () => sv('kama_game_shortcuts', gameShortcuts.checked ? 'on' : 'off');
 document.addEventListener('keydown',event=>{
- if(document.documentElement.classList.contains('auth-pending')||event.defaultPrevented||event.repeat||event.ctrlKey||event.metaKey||event.altKey||event.isComposing)return;
+ if(!gameShortcuts.checked||document.documentElement.classList.contains('auth-pending')||event.defaultPrevented||event.repeat||event.ctrlKey||event.metaKey||event.altKey||event.isComposing)return;
  if(event.target.closest('input,textarea,select,[contenteditable]:not([contenteditable="false"])')||document.querySelector('dialog[open]'))return;
  if(event.key===' '&&event.target.closest('button,a,summary'))return;
  const key=event.key.toLowerCase();let handled=false;

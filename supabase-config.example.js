@@ -3,5 +3,6 @@
 // Never put a service_role or secret key in browser code.
 window.KAMA_SUPABASE_CONFIG = {
   url: "https://YOUR_PROJECT_REF.supabase.co",
-  publishableKey: "sb_publishable_REPLACE_ME"
+  publishableKey: "sb_publishable_REPLACE_ME",
+  // authRedirectUrl: "https://your-deployment.example/game.html", // Also allowlist this URL in Supabase Auth.
 };

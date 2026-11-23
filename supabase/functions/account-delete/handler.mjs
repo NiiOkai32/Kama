@@ -20,7 +20,7 @@ export function createAccountDelete({env,fetcher=fetch}){
       if(body?.confirmation!=='DELETE'||typeof body.password!=='string'||!body.password||body.password.length>256)return reply('Enter your password and type DELETE.',400);
       const url=env('SUPABASE_URL'),publicKey=key(env,'SUPABASE_PUBLISHABLE_KEYS','SUPABASE_ANON_KEY'),serverKey=key(env,'SUPABASE_SECRET_KEYS','SUPABASE_SERVICE_ROLE_KEY');
       if(!/^https:\/\/[a-z0-9]{20}\.supabase\.co$/.test(url||'')||!publicKey||!serverKey)return reply('Account service is unavailable.',503);
-      const call=(path,options={})=>fetcher(url+path,{...options,signal:AbortSignal.timeout(15000)});
+      const call=(path,options={})=>fetcher(url+path,{...options,redirect:'error',signal:AbortSignal.timeout(15000)});
       const verified=await call('/auth/v1/user',{headers:{apikey:publicKey,Authorization:authorization}});
       if(!verified.ok)return reply('Sign in again.',401);
       const user=await verified.json();if(!UUID.test(user.id||'')||typeof user.email!=='string')return reply('Sign in again.',401);

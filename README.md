@@ -12,7 +12,7 @@ Extract the ZIP and drag its **dist** folder into the **Deploys** tab of your ex
 2. Open your existing site in Netlify and go to **Deploys**.
 3. Drag the extracted **dist** folder into the manual deployment area.
 
-Upload the folder that directly contains `index.html`, `game.html`, and `assets/`.
+Upload the folder that directly contains `index.html`, `game.html`, `assets/`, and `_headers`.
 No build command is needed for this manual upload. Keep the same Netlify site URL
 so existing Supabase redirect settings and browser-saved cards continue to work.
 The public Supabase project address is verified against the connected Kama project. The existing publishable key is preserved.
@@ -123,3 +123,12 @@ The Supabase client is self-hosted at version 2.118.0. The build writes CSP and 
 ## Music while playing
 
 Choose **Music**, select a starter or save a Spotify/Apple Music playlist share link, then **Open**. Press Play in the music app or tab and return to Kama; the whole playlist can continue independently of card changes. Music playback and account requirements stay with the provider. Kama mutes ambient sound and timer tones by default after opening a playlist, while keeping vibration alerts. No streaming SDK, account linking, previews or remote embeds are included. [Music setup and limits](docs/MUSIC.md).
+
+
+## Policies and account emails
+
+The [terms and refunds](terms.html) and [privacy notice](privacy.html) describe the current product. Signup requires agreement to the terms. Kama uses functional browser storage and has no optional analytics or advertising cookies to consent to.
+
+Account confirmation and recovery emails use the configured HTTPS game URL, which defaults to `https://niiokai32.github.io/Kama/game.html`. Other builds can set `KAMA_AUTH_REDIRECT_URL` and allowlist that exact callback in Supabase Auth before deployment. Netlify applies the headers in the built `_headers` file on manual and Git-backed deploys.
+
+See the [review notes](docs/SECURITY-REVIEW.md) for provider settings and remaining launch work.
