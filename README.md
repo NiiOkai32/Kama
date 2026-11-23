@@ -12,10 +12,14 @@ Extract the ZIP and drag its **dist** folder into the **Deploys** tab of your ex
 2. Open your existing site in Netlify and go to **Deploys**.
 3. Drag the extracted **dist** folder into the manual deployment area.
 
-Upload the folder that directly contains `index.html`, `game.html`, and `assets/`.
+Upload the folder that directly contains `index.html`, `game.html`, `assets/`, and `_headers`.
 No build command is needed for this manual upload. Keep the same Netlify site URL
 so existing Supabase redirect settings and browser-saved cards continue to work.
-The included public Supabase configuration is the one from the uploaded site.
+The public Supabase project address is verified against the connected Kama project. The existing publishable key is preserved.
+
+## Account connection fix
+
+The original uploaded project URL contained a 21-character reference instead of the verified 20-character Kama project reference. The URL is corrected to `https://eqvzzfivcujfwdfdvodm.supabase.co`; the existing publishable key was checked against the project and remains valid. Both browser initialization and the build now reject malformed project references before attempting a connection. The source, built `dist`, and downloadable ZIP carry the corrected configuration.
 
 ## Added question bank and random selection
 
@@ -90,8 +94,7 @@ The build copies the site and assets into `dist`, using the public values in
 key is explicitly present. Never use a service-role or secret key in this site.
 
 The existing `netlify.toml` still uses `node build.mjs` and publishes `dist`.
-Supabase Auth uses the existing hosted service; its JavaScript client still
-loads from the same jsDelivr URL as the uploaded version. No database changes
+Supabase Auth uses the existing hosted service; its JavaScript client is now self-hosted and pinned. No database changes
 are required by this interface update. The existing SQL migration is retained
 in the source archive for reference and is not included in the public build.
 
@@ -105,4 +108,27 @@ modals, night mode, and signed-out redirects. Additional checks covered keyboard
 
 Auth screen success, error and email-confirmation states were tested with a
 mocked service. No live account was created and live Supabase authentication
-was not verified. The uploaded public project configuration is preserved.
+was not verified. The original publishable key is preserved; the malformed project URL has been corrected against the connected project metadata.
+
+## Optional forfeits
+
+Choose **Couldn’t complete** on a card, then **Playful**, **Drink** (one sip of any drink), or **Custom**. Custom wording is saved on that device for reuse and rendered as plain text. **Done** finishes the forfeit without counting the original task as completed; **Skip** dismisses it. Each task records its outcome once. Remote Duet retains its existing shared-completion flow.
+
+## Privacy and account safety
+
+The current build adds a recurring 18+ self-declaration, first-visit instructions, sticky Pause / Stop and Hide controls, device-data clearing, password recovery, password-confirmed account deletion, per-player local theme boundaries and validated JSON custom-deck backups. Account-linked gameplay analytics are disabled. Local storage is shared across accounts using the same browser profile. See [the privacy notice](privacy.html) and [the suggestions review](docs/SECURITY-REVIEW.md) for limits and remaining provider settings.
+
+The Supabase client is self-hosted at version 2.118.0. The build writes CSP and no-referrer metadata into root pages and dist, and Netlify response headers add frame, MIME and permission protections. Server credentials remain in Edge Function environment variables. The publishable browser key is intentionally public.
+
+## Music while playing
+
+Choose **Music**, select a starter or save a Spotify/Apple Music playlist share link, then **Open**. Press Play in the music app or tab and return to Kama; the whole playlist can continue independently of card changes. Music playback and account requirements stay with the provider. Kama mutes ambient sound and timer tones by default after opening a playlist, while keeping vibration alerts. No streaming SDK, account linking, previews or remote embeds are included. [Music setup and limits](docs/MUSIC.md).
+
+
+## Policies and account emails
+
+The [terms and refunds](terms.html) and [privacy notice](privacy.html) describe the current product. Signup requires agreement to the terms. Kama uses functional browser storage and has no optional analytics or advertising cookies to consent to.
+
+Account confirmation and recovery emails use the configured HTTPS game URL, which defaults to `https://niiokai32.github.io/Kama/game.html`. Other builds can set `KAMA_AUTH_REDIRECT_URL` and allowlist that exact callback in Supabase Auth before deployment. Netlify applies the headers in the built `_headers` file on manual and Git-backed deploys.
+
+See the [review notes](docs/SECURITY-REVIEW.md) for provider settings and remaining launch work.

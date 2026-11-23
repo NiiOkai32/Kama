@@ -1,0 +1,4 @@
+
+[functions.account-delete]
+# Body validates the session with Auth and requires password reauthentication.
+verify_jwt = false
