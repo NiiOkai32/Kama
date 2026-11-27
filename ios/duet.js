@@ -1,6 +1,7 @@
 (() => {
   const byId=id=>document.getElementById(id);
   let client=null,hosting='checking',privatePrompt='',lastCardId=null,inviteToken='',clockOffset=0,clockTick=null,connection='connecting';
+  let accessError='',checkingAccess=false;
   let completed=new Set(ld('kama_duet_completed',[]));
   const active=()=>mode==='duet'&&!!client?.room;
   function errorMessage(error){return error?.message||'Could not connect to Duet. Try again.'}
@@ -19,6 +20,15 @@
     const {data,error}=await window.kamaSupabase.functions.invoke('duet',{body});
     if(error){let message=error.message;try{message=(await error.context.clone().json()).error||message}catch{}const failure=new Error(message||'Could not connect to Duet.');failure.status=error.context?.status||0;throw failure}
     if(data?.error)throw new Error(data.error);return data;
+  }
+  function accessErrorMessage(error){
+    const code=error?.status;
+    if(code===401)return 'Duet could not verify your session (401). Sign out and sign in again.';
+    if(code===403)return 'The Duet server denied the access check (403).';
+    if(code===404)return 'The Duet server function could not be found (404).';
+    if(code>=500)return 'The Duet server could not check hosting access ('+code+').';
+    if(code===0)return 'Kama could not reach the Duet server. Check your connection and retry.';
+    return 'Kama could not check Duet hosting access. Try again.';
   }
   function updateConnection(){
     if(!client?.room)return;
@@ -42,6 +52,7 @@
     byId('duetLobby').classList.toggle('hidden',!!room);byId('duetRoom').classList.toggle('hidden',!room);
     byId('duetOffer').classList.toggle('hidden',!!room||hosting!=='membership');
     byId('duetCreate').classList.toggle('hidden',hosting!=='trial'&&hosting!=='member');
+    byId('duetRetryAccess').classList.toggle('hidden',hosting!=='unavailable');
     byId('duetDraw').disabled=!room?.guest_id;
     byId('actionDock').classList.toggle('hidden',!room);
     if(!room){
@@ -51,7 +62,7 @@
         trial:'Duet is free during the Kama 2.0 test. Start a private room or join your partner.',
         member:'Your membership is active. Start a room or join your partner.',
         membership:'One membership lets you host. An invited partner joins for free.',
-        unavailable:'Could not check Duet access. Try reopening the game. Local play is available.'
+        unavailable:accessError
       }[hosting]);
       return;
     }
@@ -94,7 +105,11 @@
     if(button)button.disabled=true;
     let failure;
     try{return await operation()}catch(error){failure=error;showToast(errorMessage(error))}
-    finally{if(button)button.disabled=!!restore;render(client?.room);if(failure)status(errorMessage(failure))}
+    finally{
+      if(button)button.disabled=!!restore;
+      render(client?.room);
+      if(failure&&(client?.room||!['checking','unavailable'].includes(hosting)))status(errorMessage(failure));
+    }
   }
   const originalMode=setMode;
   setMode=function(next){
@@ -128,12 +143,34 @@
   });
   byId('duetLeave').onclick=()=>run(byId('duetLeave'),async()=>{await client.command('leave');privatePrompt='';inviteToken='';lastCardId=null;render(null)});
   byId('duetReconnect').onclick=()=>run(byId('duetReconnect'),()=>client.refresh());
+  byId('duetRetryAccess').onclick=()=>checkLobby();
   byId('duetPrivateDraw').onclick=()=>{
     if(!active()||!client.room.card_id)return;
     const kind=randomInt(2)?'truth':'desire';privatePrompt=promptPicker.take(TD[kind][level]||TD[kind][1],{avoid:privatePrompt})||'';
     byId('duetPrivateText').textContent=privatePrompt;byId('duetReveal').disabled=!(client.room.host_ready&&client.room.guest_ready);
   };
   byId('duetReveal').onclick=()=>run(byId('duetReveal'),()=>client.command('reveal',{text:privatePrompt}));
+  async function checkLobby(){
+    if(!client||checkingAccess)return;
+    checkingAccess=true;
+    hosting='checking';
+    render(client.room);
+    try{
+      const access=await api({action:'membership'});
+      const canHost=access?.can_host??access?.premium;
+      if(typeof canHost!=='boolean')throw new Error('Invalid Duet access response.');
+      try{if(!client.room)await client.resume()}catch{
+        if(mode==='duet')showToast('Could not reopen a previous Duet room.');
+      }
+      hosting=canHost?(access.free_trial===true?'trial':'member'):'membership';
+    }catch(error){
+      hosting='unavailable';
+      accessError=accessErrorMessage(error);
+    }finally{
+      checkingAccess=false;
+      render(client.room);
+    }
+  }
   async function initialize(){
     if(client||!accountUser)return;
     client=new window.KamaDuetClient.DuetClient({
@@ -144,13 +181,7 @@
         return ()=>window.kamaSupabase.removeChannel(channel).catch(()=>{});
       }
     });
-    try{
-      const access=await api({action:'membership'});
-      const canHost=(access.can_host??access.premium)===true;
-      hosting=canHost?(access.free_trial===true?'trial':'member'):'membership';
-      await client.resume();
-      if(mode==='duet')render(client.room);
-    }catch(error){hosting='unavailable';if(mode==='duet')render(client.room)}
+    await checkLobby();
     try{const invite=sessionStorage.getItem('kama_duet_invite');if(invite){byId('duetCode').value=invite;setMode('duet')}}catch{}
   }
   window.kamaDuet={pause:()=>{if(client?.room?.timer_ends_at)client.command('timer_pause').catch(error=>showToast(errorMessage(error)))},getNames:()=>client?.room?[client.room.host_name,client.room.guest_name||'Partner']:null,get active(){return active()},get room(){return client?.room}};

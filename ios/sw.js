@@ -1,7 +1,7 @@
 /* Built with the exact list and content version of the public app files. */
 const files = ["account-pages.js","assets/emblem.svg","assets/favicon.svg","assets/icons.svg","assets/touch-icon.png","assets/vendor/LICENSE.supabase","assets/vendor/README.md","assets/vendor/supabase.js","auth.css","auth.js","design.css","device.js","duet-client.js","duet-price.js","duet.css","duet.js","game.css","game.html","game.js","index.html","manifest.webmanifest","music-links.js","music.css","music.js","privacy.css","privacy.html","privacy.js","pwa.js","questions.js","quiet.css","quiet.html","random.js","reset.html","responsive.css","safety-gate.js","signin.html","signup.html","supabase-config.js","terms.html"];
 const cachePrefix = 'kama-ios:' + self.registration.scope + ':';
-const cacheName = cachePrefix + '7eadb4b3f1fb5fe8f12e';
+const cacheName = cachePrefix + '51cafc2c596efbd34390';
 const scope = new URL(self.registration.scope);
 const index = new URL('index.html', scope).href;
 const urlsByPath = new Map(files.map(file => {
