@@ -1,0 +1,13 @@
+{
+  "id": "./",
+  "name": "Kama 2.0",
+  "short_name": "Kama",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#151216",
+  "theme_color": "#151216",
+  "icons": [
+    { "src": "assets/touch-icon.png", "sizes": "180x180", "type": "image/png" }
+  ]
+}
